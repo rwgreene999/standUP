@@ -1,4 +1,6 @@
 # What this project is about
+
+THIS IS A WORK IN PROGRESS, NOT COMPLETE
   
 This is a small Qt desktop app, built around main.cpp, called “Chair Reminder.” Its purpose is to help someone avoid sitting too long by setting a timer and reminding them to take a break or stand up.
 
