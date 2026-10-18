@@ -1,6 +1,8 @@
 #include "standUP.h"
 
+#include <QApplication>
 #include <QDateTime>
+#include <QEvent>
 #include <QMessageBox>
 #include <QStackedWidget>
 #include <QTimer>
@@ -15,7 +17,9 @@ standUP::standUP(QWidget *parent)
     : QWidget(parent)
 {
     setWindowTitle("standUP");
-    resize(480, 520);
+    resize(360, 320);
+
+    qApp->installEventFilter(this);
 
     stackedWidget_ = new QStackedWidget(this);
 
@@ -58,6 +62,23 @@ standUP::standUP(QWidget *parent)
     updateClock();
 }
 
+bool standUP::eventFilter(QObject *watched, QEvent *event)
+{
+    if (isAlerting_)
+    {
+        if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TouchBegin)
+        {
+            auto *widget = qobject_cast<QWidget *>(watched);
+            if (widget && (widget == this || this->isAncestorOf(widget)))
+            {
+                dismissAlert();
+                return true;
+            }
+        }
+    }
+    return QWidget::eventFilter(watched, event);
+}
+
 void standUP::updateClock()
 {
     QDateTime now = QDateTime::currentDateTime();
@@ -80,6 +101,11 @@ void standUP::updateClock()
 
 void standUP::onApplyInputTime()
 {
+    if (isAlerting_)
+    {
+        dismissAlert();
+    }
+
     QString input = mainScreen_->timeInput()->text().trimmed();
     QDateTime now = QDateTime::currentDateTime();
 
@@ -119,6 +145,12 @@ void standUP::onApplyInputTime()
 
 void standUP::onToggleGoStop()
 {
+    if (isAlerting_)
+    {
+        dismissAlert();
+        return;
+    }
+
     if (isRunning_)
     {
         stopTimer();
@@ -156,7 +188,8 @@ void standUP::onTogglePauseResume()
 void standUP::triggerAlert()
 {
     isRunning_ = false;
-    mainScreen_->statusLabel()->setText("Time to get out of your chair!");
+    isAlerting_ = true;
+    mainScreen_->statusLabel()->setText("Time to stand up! (Click anywhere to dismiss)");
 
     audioPlayer_->playAlert();
     systemAlert_->start();
@@ -165,8 +198,31 @@ void standUP::triggerAlert()
     mainScreen_->pauseResumeButton()->setEnabled(false);
 }
 
+void standUP::dismissAlert()
+{
+    if (!isAlerting_)
+    {
+        return;
+    }
+
+    isAlerting_ = false;
+    systemAlert_->stop();
+    audioPlayer_->stopPlayback();
+
+    mainScreen_->statusLabel()->setText("Status: Idle");
+    mainScreen_->expireTimeLabel()->setText("Expire Time: --:--:--");
+    mainScreen_->goStopButton()->setText("Go");
+    mainScreen_->pauseResumeButton()->setText("Pause");
+    mainScreen_->pauseResumeButton()->setEnabled(false);
+}
+
 void standUP::onAddMinutes(int minutes)
 {
+    if (isAlerting_)
+    {
+        dismissAlert();
+    }
+
     QDateTime now = QDateTime::currentDateTime();
     if (!isRunning_)
     {
@@ -176,6 +232,10 @@ void standUP::onAddMinutes(int minutes)
     else
     {
         expireDateTime_ = expireDateTime_.addSecs(minutes * 60);
+        if (isPaused_)
+        {
+            remainingSeconds_ += minutes * 60;
+        }
         mainScreen_->expireTimeLabel()->setText("Expire Time: " + expireDateTime_.toString("HH:mm:ss"));
     }
 }
@@ -202,6 +262,11 @@ void standUP::showMainScreen()
 
 void standUP::startTimerExecution()
 {
+    if (isAlerting_)
+    {
+        dismissAlert();
+    }
+
     isRunning_ = true;
     isPaused_ = false;
     mainScreen_->goStopButton()->setText("Stop");
@@ -212,9 +277,15 @@ void standUP::startTimerExecution()
 
 void standUP::stopTimer()
 {
+    if (isAlerting_)
+    {
+        dismissAlert();
+    }
+
     isRunning_ = false;
     isPaused_ = false;
     systemAlert_->stop();
+    audioPlayer_->stopPlayback();
     mainScreen_->goStopButton()->setText("Go");
     mainScreen_->pauseResumeButton()->setText("Pause");
     mainScreen_->pauseResumeButton()->setEnabled(false);

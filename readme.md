@@ -21,6 +21,14 @@ cmake -S . -B build
 cmake --build build 
 --parallel
 ```
+or in one line 
+```
+rm -rf build && cmake -S . -B build && cmake --build build --parallel && ./build/standUP
+```
+ 
+
+
+
 
 ## to play music 
 If you choose to play music when the standUP alert happens, 

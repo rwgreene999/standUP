@@ -11,22 +11,27 @@ MainScreen::MainScreen(QWidget *parent)
     : QWidget(parent)
 {
     auto *layout = new QVBoxLayout(this);
+    layout->setSpacing(8);
+    layout->setContentsMargins(12, 12, 12, 12);
 
     lblCurrentTime_ = new QLabel("Current Time: --:--:--", this);
     lblCurrentTime_->setAlignment(Qt::AlignCenter);
     lblCurrentTime_->setStyleSheet("font-size: 16px; font-weight: bold;");
+    lblCurrentTime_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     lblExpireTime_ = new QLabel("Expire Time: --:--:--", this);
     lblExpireTime_->setAlignment(Qt::AlignCenter);
     lblExpireTime_->setStyleSheet("font-size: 16px; font-weight: bold;");
+    lblExpireTime_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     lblStatus_ = new QLabel("Status: Idle", this);
     lblStatus_->setAlignment(Qt::AlignCenter);
+    lblStatus_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     layout->addWidget(lblCurrentTime_);
     layout->addWidget(lblExpireTime_);
     layout->addWidget(lblStatus_);
-    layout->addSpacing(10);
+    layout->addSpacing(4);
 
     auto *inputLayout = new QHBoxLayout();
     txtInputTime_ = new QLineEdit(this);
@@ -37,6 +42,7 @@ MainScreen::MainScreen(QWidget *parent)
     layout->addLayout(inputLayout);
 
     connect(btnApplyInput, &QPushButton::clicked, this, &MainScreen::applyInputRequested);
+    connect(txtInputTime_, &QLineEdit::returnPressed, this, &MainScreen::applyInputRequested);
 
     auto *gridButtons = new QGridLayout();
     btnAdd1_ = new QPushButton("+1 Min", this);

@@ -13,6 +13,8 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
     : QWidget(parent)
 {
     auto *layout = new QVBoxLayout(this);
+    layout->setSpacing(8);
+    layout->setContentsMargins(12, 12, 12, 12);
 
     auto *lblTitle = new QLabel("Settings", this);
     lblTitle->setStyleSheet("font-size: 18px; font-weight: bold;");
