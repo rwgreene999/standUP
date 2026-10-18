@@ -32,3 +32,4 @@ missing
 .DS_Store
 Thumbs.db
 
+build/
