@@ -1,6 +1,6 @@
-/home/rwg/projects/junk/alert2/build/standUP_autogen/EWIEGA46WW/moc_standUP.cpp: /home/rwg/projects/junk/alert2/standUP.h \
-  /home/rwg/projects/junk/alert2/build/standUP_autogen/moc_predefs.h \
-  /home/rwg/projects/junk/alert2/AppSettings.h \
+/home/rwg/projects/GitHub/standUP/build/standUP_autogen/EWIEGA46WW/moc_standUP.cpp: /home/rwg/projects/GitHub/standUP/standUP.h \
+  /home/rwg/projects/GitHub/standUP/build/standUP_autogen/moc_predefs.h \
+  /home/rwg/projects/GitHub/standUP/AppSettings.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \

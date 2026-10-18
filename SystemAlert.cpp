@@ -16,6 +16,7 @@ void SystemAlert::configure(const AppSettings &settings, const QString &normalSt
 
 void SystemAlert::start()
 {
+    isAlerting_ = true;
     if (topmost_)
     {
         targetWindow_->setWindowFlags(targetWindow_->windowFlags() | Qt::WindowStaysOnTopHint);
@@ -35,8 +36,14 @@ void SystemAlert::start()
 
 void SystemAlert::stop()
 {
+    isAlerting_ = false;
     flashTimer_->stop();
     flashState_ = false;
+    if (topmost_ && (targetWindow_->windowFlags() & Qt::WindowStaysOnTopHint))
+    {
+        targetWindow_->setWindowFlags(targetWindow_->windowFlags() & ~Qt::WindowStaysOnTopHint);
+        targetWindow_->show();
+    }
     targetWindow_->setWindowOpacity(1.0);
     targetWindow_->setStyleSheet(normalStyleSheet_);
 }

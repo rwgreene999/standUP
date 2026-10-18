@@ -22,12 +22,16 @@ class standUP : public QWidget
 public:
     explicit standUP(QWidget *parent = nullptr);
 
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 private slots:
     void updateClock();
     void onApplyInputTime();
     void onToggleGoStop();
     void onTogglePauseResume();
     void triggerAlert();
+    void dismissAlert();
     void onAddMinutes(int minutes);
     void saveSettings();
     void showSettings();
@@ -46,6 +50,7 @@ private:
     QDateTime expireDateTime_;
     bool isRunning_ = false;
     bool isPaused_ = false;
+    bool isAlerting_ = false;
     qint64 remainingSeconds_ = 0;
 
     AppSettings settings_;

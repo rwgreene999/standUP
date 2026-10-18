@@ -1,5 +1,5 @@
-/home/rwg/projects/junk/alert2/build/standUP_autogen/EWIEGA46WW/moc_MainScreen.cpp: /home/rwg/projects/junk/alert2/MainScreen.h \
-  /home/rwg/projects/junk/alert2/build/standUP_autogen/moc_predefs.h \
+/home/rwg/projects/GitHub/standUP/build/standUP_autogen/EWIEGA46WW/moc_MainScreen.cpp: /home/rwg/projects/GitHub/standUP/MainScreen.h \
+  /home/rwg/projects/GitHub/standUP/build/standUP_autogen/moc_predefs.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \

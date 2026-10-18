@@ -15,6 +15,7 @@ public:
     void configure(const AppSettings &settings, const QString &normalStyleSheet);
     void start();
     void stop();
+    bool isAlerting() const { return isAlerting_; }
 
 private slots:
     void toggleFlash();
@@ -24,6 +25,7 @@ private:
     QTimer *flashTimer_ = nullptr;
     bool flashState_ = false;
     bool flashEnabled_ = false;
+    bool isAlerting_ = false;
     bool topmost_ = false;
     QString normalStyleSheet_;
 };
