@@ -52,9 +52,8 @@ standUP::standUP(QWidget *parent)
     connect(configPanel_, &ConfigurationPanel::soundPreviewRequested, this, [this](const QString &filePath)
             { audioPlayer_->playPreview(filePath); });
 
-    settings_.theme = "Dark";
-    settings_.flashScreen = true;
-    settings_.soundType = "Default Beep";
+    settings_.load();
+    configPanel_->applySettings(settings_);
 
     audioPlayer_->configure(settings_);
     systemAlert_->configure(settings_, normalStyleSheet_);
@@ -243,6 +242,7 @@ void standUP::onAddMinutes(int minutes)
 void standUP::saveSettings()
 {
     settings_ = configPanel_->settings();
+    settings_.save();
     audioPlayer_->configure(settings_);
     systemAlert_->configure(settings_, normalStyleSheet_);
     applyTheme();
