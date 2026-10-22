@@ -16,7 +16,7 @@
 standUP::standUP(QWidget *parent)
     : QWidget(parent)
 {
-    setWindowTitle("standUP");
+    setWindowTitle(QString("standUP v%1").arg(APP_VERSION));
     resize(360, 320);
 
     qApp->installEventFilter(this);
