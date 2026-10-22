@@ -46,7 +46,9 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 
 ## where this  is going 
 
-* make smaller window 
+* DONE: make smaller window 
+* DONE: On flash alert, click anywhere to end flash
+* Gemini says I am doing the sound wrong 
 * add more theses for kicks
 * test system sounds, maybe add more 
 * feature: add option to make the after shutup
