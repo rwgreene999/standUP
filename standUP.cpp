@@ -1,5 +1,6 @@
 #include "standUP.h"
 
+#include <algorithm>
 #include <QApplication>
 #include <QDateTime>
 #include <QEvent>
@@ -182,16 +183,18 @@ void standUP::onTogglePauseResume()
     if (!isPaused_)
     {
         isPaused_ = true;
-        remainingSeconds_ = QDateTime::currentDateTime().secsTo(expireDateTime_);
+        remainingSeconds_ = std::max<qint64>(0, QDateTime::currentDateTime().secsTo(expireDateTime_));
         mainScreen_->pauseResumeButton()->setText("Resume");
-        mainScreen_->statusLabel()->setText("Status: Paused");
+        mainScreen_->statusLabel()->setText(
+            QString("Status: Paused (%1 left)").arg(QTime(0, 0).addSecs(remainingSeconds_).toString("HH:mm:ss")));
     }
     else
     {
         isPaused_ = false;
         expireDateTime_ = QDateTime::currentDateTime().addSecs(remainingSeconds_);
+        mainScreen_->expireTimeLabel()->setText("Expire Time: " + expireDateTime_.toString("HH:mm:ss"));
         mainScreen_->pauseResumeButton()->setText("Pause");
-        mainScreen_->statusLabel()->setText("Status: Running");
+        updateClock();
     }
 }
 
@@ -241,10 +244,16 @@ void standUP::onAddMinutes(int minutes)
     }
     else
     {
-        expireDateTime_ = expireDateTime_.addSecs(minutes * 60);
         if (isPaused_)
         {
             remainingSeconds_ += minutes * 60;
+            expireDateTime_ = now.addSecs(remainingSeconds_);
+            mainScreen_->statusLabel()->setText(
+                QString("Status: Paused (%1 left)").arg(QTime(0, 0).addSecs(remainingSeconds_).toString("HH:mm:ss")));
+        }
+        else
+        {
+            expireDateTime_ = expireDateTime_.addSecs(minutes * 60);
         }
         mainScreen_->expireTimeLabel()->setText("Expire Time: " + expireDateTime_.toString("HH:mm:ss"));
     }

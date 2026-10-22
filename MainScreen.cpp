@@ -33,17 +33,6 @@ MainScreen::MainScreen(QWidget *parent)
     layout->addWidget(lblStatus_);
     layout->addSpacing(4);
 
-    auto *inputLayout = new QHBoxLayout();
-    txtInputTime_ = new QLineEdit(this);
-    txtInputTime_->setPlaceholderText("hh:mm:ss or +mins");
-    auto *btnApplyInput = new QPushButton("Set Time", this);
-    inputLayout->addWidget(txtInputTime_);
-    inputLayout->addWidget(btnApplyInput);
-    layout->addLayout(inputLayout);
-
-    connect(btnApplyInput, &QPushButton::clicked, this, &MainScreen::applyInputRequested);
-    connect(txtInputTime_, &QLineEdit::returnPressed, this, &MainScreen::applyInputRequested);
-
     auto *gridButtons = new QGridLayout();
     btnAdd1_ = new QPushButton("+1 Min", this);
     btnAdd5_ = new QPushButton("+5 Mins", this);
@@ -64,6 +53,17 @@ MainScreen::MainScreen(QWidget *parent)
             { emit addMinutesRequested(10); });
     connect(btnAdd30_, &QPushButton::clicked, this, [this]()
             { emit addMinutesRequested(30); });
+
+    auto *inputLayout = new QHBoxLayout();
+    txtInputTime_ = new QLineEdit(this);
+    txtInputTime_->setPlaceholderText("hh:mm:ss or +mins");
+    auto *btnApplyInput = new QPushButton("Set Time", this);
+    inputLayout->addWidget(txtInputTime_);
+    inputLayout->addWidget(btnApplyInput);
+    layout->addLayout(inputLayout);
+
+    connect(btnApplyInput, &QPushButton::clicked, this, &MainScreen::applyInputRequested);
+    connect(txtInputTime_, &QLineEdit::returnPressed, this, &MainScreen::applyInputRequested);
 
     auto *controlLayout = new QHBoxLayout();
     btnGoStop_ = new QPushButton("Go", this);

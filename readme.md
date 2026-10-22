@@ -51,12 +51,13 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: Added settings savings in config file
 * DONE: VersionInfo add version info to title bar, using cmake process
 * DONE: MusicTest 0.2.0 option to make the after shutup
+* DONE: FixElapse 0.3.0 fix the elapse time to update when user pauses and restarts 
+* DONE: ScreenUpdate 0.4.0 move manual set time below the buttons 
 * 
 * Gemini says I am doing the sound wrong 
-* bug: fix the elapse time to update when user pauses and restarts 
 * todo: add flash color choices 
 * cancel: change 1 minute to 15 second timer 
-* todo: move manual set time below the buttons 
+
 
 
 * add more theses for kicks
