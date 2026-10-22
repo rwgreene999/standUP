@@ -18,6 +18,7 @@ public:
     void playAlert();
     void playPreview(const QString &filePath);
     void stopPlayback();
+    bool isPlaying() const;
 
 private:
     bool launchExternalPlayer(const QString &filePath);

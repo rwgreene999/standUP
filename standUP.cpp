@@ -75,6 +75,17 @@ bool standUP::eventFilter(QObject *watched, QEvent *event)
             }
         }
     }
+    else if (audioPlayer_ && audioPlayer_->isPlaying())
+    {
+        if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TouchBegin)
+        {
+            auto *widget = qobject_cast<QWidget *>(watched);
+            if (widget && (widget == this || this->isAncestorOf(widget)))
+            {
+                audioPlayer_->stopPlayback();
+            }
+        }
+    }
     return QWidget::eventFilter(watched, event);
 }
 
@@ -251,12 +262,14 @@ void standUP::saveSettings()
 
 void standUP::showSettings()
 {
+    audioPlayer_->stopPlayback();
     configPanel_->applySettings(settings_);
     stackedWidget_->setCurrentIndex(1);
 }
 
 void standUP::showMainScreen()
 {
+    audioPlayer_->stopPlayback();
     stackedWidget_->setCurrentIndex(0);
 }
 

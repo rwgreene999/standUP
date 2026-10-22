@@ -49,7 +49,7 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: make smaller window 
 * DONE: On flash alert, click anywhere to end flash
 * DONE: Added settings savings in config file
-* DONE: VersionInfo add version info somewhere 
+* DONE: VersionInfo add version info to title bar, using cmake process
 * 
 * Gemini says I am doing the sound wrong 
 * bug: fix the elapse time to update when user pauses and restarts 

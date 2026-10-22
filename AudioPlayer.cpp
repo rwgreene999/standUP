@@ -42,6 +42,13 @@ void AudioPlayer::stopPlayback()
     }
 }
 
+bool AudioPlayer::isPlaying() const
+{
+    const bool procRunning = (playerProcess_ && playerProcess_->state() != QProcess::NotRunning);
+    const bool soundRunning = (soundEffect_ && soundEffect_->isPlaying());
+    return procRunning || soundRunning;
+}
+
 bool AudioPlayer::launchExternalPlayer(const QString &filePath)
 {
     const QString playerName = chooseBestPlayer();
@@ -53,6 +60,13 @@ bool AudioPlayer::launchExternalPlayer(const QString &filePath)
     stopPlayback();
 
     playerProcess_ = new QProcess(this);
+    connect(playerProcess_, &QProcess::finished, this, [this]() {
+        if (playerProcess_)
+        {
+            playerProcess_->deleteLater();
+            playerProcess_ = nullptr;
+        }
+    });
     playerProcess_->start(playerName, buildPlayerArgs(playerName, filePath));
 
     if (!playerProcess_->waitForStarted(2000))
