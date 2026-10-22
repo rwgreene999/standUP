@@ -49,21 +49,21 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: make smaller window 
 * DONE: On flash alert, click anywhere to end flash
 * DONE: Added settings savings in config file
-* DONE: VersionInfo add version info somewhere 
+* DONE: VersionInfo add version info to title bar, using cmake process
+* DONE: MusicTest 0.2.0 option to make the after shutup
 * 
 * Gemini says I am doing the sound wrong 
 * bug: fix the elapse time to update when user pauses and restarts 
 * todo: add flash color choices 
-* todo: change 1 minute to 15 second timer 
-* todo: move manual set tome below the buttons 
+* cancel: change 1 minute to 15 second timer 
+* todo: move manual set time below the buttons 
 
 
 * add more theses for kicks
 * test system sounds, maybe add more 
-* feature: add option to make the after shutup
-* feature: add option ot make it stop flashing when after alert 
 * provide some cool sounds 
 * provide ability to change settings without savings for testing 
-* Options messages during aLERT
+* Feature: AlertMessage In settings, allow user options for alert 
+* Feature: RepeatAlert Add a repeat button, stop current alert and start new one 
 * 
 * 
