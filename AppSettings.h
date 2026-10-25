@@ -10,7 +10,7 @@
 
 struct AppSettings
 {
-    QString soundType = "Default Beep";
+    QString soundType = "High Beep";
     QString customSoundPath;
     bool topmost = false;
     bool flashScreen = true;
@@ -45,6 +45,10 @@ struct AppSettings
         if (obj.contains("soundType") && obj["soundType"].isString())
         {
             soundType = obj["soundType"].toString();
+            if (soundType == "Default Beep")
+            {
+                soundType = "High Beep";
+            }
         }
         if (obj.contains("customSoundPath") && obj["customSoundPath"].isString())
         {
