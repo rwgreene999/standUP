@@ -34,6 +34,8 @@ private slots:
     void dismissAlert();
     void onAddMinutes(int minutes);
     void saveSettings();
+    void applySettings();
+    void cancelSettings();
     void showSettings();
     void showMainScreen();
 

@@ -51,10 +51,19 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
 
     layout->addStretch();
 
-    btnBackSettings_ = new QPushButton("Save & Back", this);
-    layout->addWidget(btnBackSettings_);
+    auto *buttonLayout = new QHBoxLayout();
+    btnSave_ = new QPushButton("Save", this);
+    btnApply_ = new QPushButton("Apply", this);
+    btnCancel_ = new QPushButton("Cancel", this);
 
-    connect(btnBackSettings_, &QPushButton::clicked, this, &ConfigurationPanel::saveRequested);
+    buttonLayout->addWidget(btnSave_);
+    buttonLayout->addWidget(btnApply_);
+    buttonLayout->addWidget(btnCancel_);
+    layout->addLayout(buttonLayout);
+
+    connect(btnSave_, &QPushButton::clicked, this, &ConfigurationPanel::saveRequested);
+    connect(btnApply_, &QPushButton::clicked, this, &ConfigurationPanel::applyRequested);
+    connect(btnCancel_, &QPushButton::clicked, this, &ConfigurationPanel::cancelRequested);
 }
 
 AppSettings ConfigurationPanel::settings() const

@@ -20,6 +20,8 @@ public:
 
 signals:
     void saveRequested();
+    void applyRequested();
+    void cancelRequested();
     void soundPreviewRequested(const QString &filePath);
 
 private:
@@ -29,7 +31,9 @@ private:
     QCheckBox *chkTopmost_ = nullptr;
     QCheckBox *chkFlash_ = nullptr;
     QComboBox *comboTheme_ = nullptr;
-    QPushButton *btnBackSettings_ = nullptr;
+    QPushButton *btnSave_ = nullptr;
+    QPushButton *btnApply_ = nullptr;
+    QPushButton *btnCancel_ = nullptr;
 
     void browseForSound();
 };

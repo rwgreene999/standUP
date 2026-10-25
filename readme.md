@@ -53,6 +53,7 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: MusicTest 0.2.0 option to make the after shutup
 * DONE: FixElapse 0.3.0 fix the elapse time to update when user pauses and restarts 
 * DONE: ScreenUpdate 0.4.0 move manual set time below the buttons 
+* DONE:  SettingsTest 0.5.0 provide ability to change settings without saving for testing 
 * 
 * Gemini says I am doing the sound wrong 
 * todo: add flash color choices 
@@ -63,7 +64,7 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * add more theses for kicks
 * test system sounds, maybe add more 
 * provide some cool sounds 
-* provide ability to change settings without savings for testing 
+
 * Feature: AlertMessage In settings, allow user options for alert 
 * Feature: RepeatAlert Add a repeat button, stop current alert and start new one 
 * 

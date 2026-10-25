@@ -50,6 +50,8 @@ standUP::standUP(QWidget *parent)
     connect(mainScreen_, &MainScreen::settingsRequested, this, &standUP::showSettings);
     connect(mainScreen_, &MainScreen::addMinutesRequested, this, &standUP::onAddMinutes);
     connect(configPanel_, &ConfigurationPanel::saveRequested, this, &standUP::saveSettings);
+    connect(configPanel_, &ConfigurationPanel::applyRequested, this, &standUP::applySettings);
+    connect(configPanel_, &ConfigurationPanel::cancelRequested, this, &standUP::cancelSettings);
     connect(configPanel_, &ConfigurationPanel::soundPreviewRequested, this, [this](const QString &filePath)
             { audioPlayer_->playPreview(filePath); });
 
@@ -266,6 +268,21 @@ void standUP::saveSettings()
     audioPlayer_->configure(settings_);
     systemAlert_->configure(settings_, normalStyleSheet_);
     applyTheme();
+    showMainScreen();
+}
+
+void standUP::applySettings()
+{
+    settings_ = configPanel_->settings();
+    audioPlayer_->configure(settings_);
+    systemAlert_->configure(settings_, normalStyleSheet_);
+    applyTheme();
+    showMainScreen();
+}
+
+void standUP::cancelSettings()
+{
+    configPanel_->applySettings(settings_);
     showMainScreen();
 }
 
