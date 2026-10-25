@@ -56,6 +56,7 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: SettingsTest 0.5.0 provide ability to change settings without saving for testing 
 * DONE: SettingsUpdate 0.6.0 add 2 themes change settings to show color changes before save 
 * DONE: AudioUpdate 0.7.0 added updates to qt6 playback as suggested by Gemini, tested multiple machines 
+* WIP:  AudioSounds 0.8.0 Added some extra beeps
 * 
 * Gemini says I am doing the sound wrong 
 * todo: add flash color choices 
