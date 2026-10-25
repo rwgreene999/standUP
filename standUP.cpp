@@ -52,6 +52,7 @@ standUP::standUP(QWidget *parent)
     connect(configPanel_, &ConfigurationPanel::saveRequested, this, &standUP::saveSettings);
     connect(configPanel_, &ConfigurationPanel::applyRequested, this, &standUP::applySettings);
     connect(configPanel_, &ConfigurationPanel::cancelRequested, this, &standUP::cancelSettings);
+    connect(configPanel_, &ConfigurationPanel::themePreviewRequested, this, &standUP::onThemePreview);
     connect(configPanel_, &ConfigurationPanel::soundPreviewRequested, this, [this](const QString &filePath)
             { audioPlayer_->playPreview(filePath); });
 
@@ -283,7 +284,13 @@ void standUP::applySettings()
 void standUP::cancelSettings()
 {
     configPanel_->applySettings(settings_);
+    applyTheme();
     showMainScreen();
+}
+
+void standUP::onThemePreview(const QString &theme)
+{
+    applyTheme(theme);
 }
 
 void standUP::showSettings()
@@ -332,10 +339,11 @@ void standUP::stopTimer()
     mainScreen_->expireTimeLabel()->setText("Expire Time: --:--:--");
 }
 
-void standUP::applyTheme()
+void standUP::applyTheme(const QString &themeName)
 {
+    QString theme = themeName.isEmpty() ? settings_.theme : themeName;
     QString qss;
-    if (settings_.theme == "Dark")
+    if (theme == "Dark")
     {
         qss = "QWidget { background-color: #2b2b2b; color: #ffffff; }"
               "QPushButton { background-color: #3c3f41; color: #ffffff; border: 1px solid #555555; padding: 6px; border-radius: 4px; }"
@@ -343,7 +351,7 @@ void standUP::applyTheme()
               "QLineEdit, QComboBox { background-color: #313335; color: #ffffff; border: 1px solid #555555; padding: 4px; }"
               "QCheckBox { color: #ffffff; }";
     }
-    else if (settings_.theme == "Light")
+    else if (theme == "Light")
     {
         qss = "QWidget { background-color: #f0f0f0; color: #000000; }"
               "QPushButton { background-color: #e1e1e1; color: #000000; border: 1px solid #adadad; padding: 6px; border-radius: 4px; }"
@@ -351,7 +359,7 @@ void standUP::applyTheme()
               "QLineEdit, QComboBox { background-color: #ffffff; color: #000000; border: 1px solid #707070; padding: 4px; }"
               "QCheckBox { color: #000000; }";
     }
-    else if (settings_.theme == "Red")
+    else if (theme == "Red")
     {
         qss = "QWidget { background-color: #3a1c1c; color: #ffcccc; }"
               "QPushButton { background-color: #5c2c2c; color: #ffffff; border: 1px solid #8c3c3c; padding: 6px; border-radius: 4px; }"
@@ -359,13 +367,29 @@ void standUP::applyTheme()
               "QLineEdit, QComboBox { background-color: #4a2424; color: #ffffff; border: 1px solid #8c3c3c; padding: 4px; }"
               "QCheckBox { color: #ffcccc; }";
     }
-    else if (settings_.theme == "Green")
+    else if (theme == "Green")
     {
         qss = "QWidget { background-color: #1c3a1c; color: #ccffcc; }"
               "QPushButton { background-color: #2c5c2c; color: #ffffff; border: 1px solid #3c8c3c; padding: 6px; border-radius: 4px; }"
               "QPushButton:hover { background-color: #3c7c3c; }"
               "QLineEdit, QComboBox { background-color: #244a24; color: #ffffff; border: 1px solid #3c8c3c; padding: 4px; }"
               "QCheckBox { color: #ccffcc; }";
+    }
+    else if (theme == "Sunset")
+    {
+        qss = "QWidget { background-color: #2b141e; color: #ffe8d6; }"
+              "QPushButton { background-color: #5c1f2e; color: #ffffff; border: 1px solid #b83a4b; padding: 6px; border-radius: 4px; }"
+              "QPushButton:hover { background-color: #78293c; }"
+              "QLineEdit, QComboBox { background-color: #3d1a26; color: #ffffff; border: 1px solid #b83a4b; padding: 4px; }"
+              "QCheckBox { color: #ffe8d6; }";
+    }
+    else if (theme == "Sunrise")
+    {
+        qss = "QWidget { background-color: #fff8f0; color: #3e2008; }"
+              "QPushButton { background-color: #ffe0b2; color: #3e2008; border: 1px solid #e67e22; padding: 6px; border-radius: 4px; }"
+              "QPushButton:hover { background-color: #ffd180; }"
+              "QLineEdit, QComboBox { background-color: #ffffff; color: #3e2008; border: 1px solid #e67e22; padding: 4px; }"
+              "QCheckBox { color: #3e2008; }";
     }
 
     normalStyleSheet_ = qss;

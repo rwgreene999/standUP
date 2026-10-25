@@ -23,6 +23,7 @@ signals:
     void applyRequested();
     void cancelRequested();
     void soundPreviewRequested(const QString &filePath);
+    void themePreviewRequested(const QString &theme);
 
 private:
     QComboBox *comboSound_ = nullptr;
