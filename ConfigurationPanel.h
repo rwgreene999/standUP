@@ -37,4 +37,5 @@ private:
     QPushButton *btnCancel_ = nullptr;
 
     void browseForSound();
+    void updateSoundControlsState();
 };
