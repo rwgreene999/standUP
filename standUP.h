@@ -36,13 +36,14 @@ private slots:
     void saveSettings();
     void applySettings();
     void cancelSettings();
+    void onThemePreview(const QString &theme);
     void showSettings();
     void showMainScreen();
 
 private:
     void startTimerExecution();
     void stopTimer();
-    void applyTheme();
+    void applyTheme(const QString &themeName = QString());
 
     QStackedWidget *stackedWidget_ = nullptr;
     MainScreen *mainScreen_ = nullptr;

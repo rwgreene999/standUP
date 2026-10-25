@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QSignalBlocker>
 #include <QVBoxLayout>
 
 ConfigurationPanel::ConfigurationPanel(QWidget *parent)
@@ -46,8 +47,10 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
     layout->addSpacing(10);
     layout->addWidget(new QLabel("Color Theme:", this));
     comboTheme_ = new QComboBox(this);
-    comboTheme_->addItems({"Dark", "Light", "Red", "Green"});
+    comboTheme_->addItems({"Dark", "Light", "Red", "Green", "Sunset", "Sunrise"});
     layout->addWidget(comboTheme_);
+
+    connect(comboTheme_, &QComboBox::currentTextChanged, this, &ConfigurationPanel::themePreviewRequested);
 
     layout->addStretch();
 
@@ -79,6 +82,7 @@ AppSettings ConfigurationPanel::settings() const
 
 void ConfigurationPanel::applySettings(const AppSettings &settings)
 {
+    const QSignalBlocker blocker(comboTheme_);
     comboSound_->setCurrentText(settings.soundType);
     txtSoundFile_->setText(settings.customSoundPath);
     chkTopmost_->setChecked(settings.topmost);

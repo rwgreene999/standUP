@@ -53,7 +53,8 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: MusicTest 0.2.0 option to make the after shutup
 * DONE: FixElapse 0.3.0 fix the elapse time to update when user pauses and restarts 
 * DONE: ScreenUpdate 0.4.0 move manual set time below the buttons 
-* DONE:  SettingsTest 0.5.0 provide ability to change settings without saving for testing 
+* DONE: SettingsTest 0.5.0 provide ability to change settings without saving for testing 
+* DONE: SettingsUpdate 0.6.0 add 2 themes change settings to show color changes before saye 
 * 
 * Gemini says I am doing the sound wrong 
 * todo: add flash color choices 
