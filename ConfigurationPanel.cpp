@@ -28,13 +28,26 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
 
     auto *fileLayout = new QHBoxLayout();
     txtSoundFile_ = new QLineEdit(this);
-    txtSoundFile_->setPlaceholderText("Path to WAV / MP3");
+    txtSoundFile_->setPlaceholderText("Path to WAV / MP3 / OGG / FLAC");
     btnBrowseSound_ = new QPushButton("Browse", this);
     fileLayout->addWidget(txtSoundFile_);
     fileLayout->addWidget(btnBrowseSound_);
     layout->addLayout(fileLayout);
 
+    connect(comboSound_, &QComboBox::currentTextChanged, this, [this](const QString &soundType) {
+        updateSoundControlsState();
+        if (soundType == "Default Beep")
+        {
+            emit soundPreviewRequested("Default Beep");
+        }
+        else if (soundType == "Custom Audio File" && !txtSoundFile_->text().isEmpty())
+        {
+            emit soundPreviewRequested(txtSoundFile_->text());
+        }
+    });
+
     connect(btnBrowseSound_, &QPushButton::clicked, this, &ConfigurationPanel::browseForSound);
+    updateSoundControlsState();
 
     layout->addSpacing(10);
     layout->addWidget(new QLabel("Visual Notifications:", this));
@@ -82,17 +95,26 @@ AppSettings ConfigurationPanel::settings() const
 
 void ConfigurationPanel::applySettings(const AppSettings &settings)
 {
-    const QSignalBlocker blocker(comboTheme_);
+    const QSignalBlocker themeBlocker(comboTheme_);
+    const QSignalBlocker soundBlocker(comboSound_);
     comboSound_->setCurrentText(settings.soundType);
     txtSoundFile_->setText(settings.customSoundPath);
     chkTopmost_->setChecked(settings.topmost);
     chkFlash_->setChecked(settings.flashScreen);
     comboTheme_->setCurrentText(settings.theme);
+    updateSoundControlsState();
+}
+
+void ConfigurationPanel::updateSoundControlsState()
+{
+    const bool isCustom = (comboSound_->currentText() == "Custom Audio File");
+    txtSoundFile_->setEnabled(isCustom);
+    btnBrowseSound_->setEnabled(isCustom);
 }
 
 void ConfigurationPanel::browseForSound()
 {
-    const QString fileName = QFileDialog::getOpenFileName(this, "Open Audio File", "", "Audio Files (*.wav *.mp3)");
+    const QString fileName = QFileDialog::getOpenFileName(this, "Open Audio File", "", "Audio Files (*.wav *.mp3 *.ogg *.flac);;All Files (*)");
     if (!fileName.isEmpty())
     {
         txtSoundFile_->setText(fileName);

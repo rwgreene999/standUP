@@ -4,8 +4,8 @@
 
 #include "AppSettings.h"
 
-class QProcess;
-class QSoundEffect;
+class QAudioOutput;
+class QMediaPlayer;
 
 class AudioPlayer : public QObject
 {
@@ -21,11 +21,12 @@ public:
     bool isPlaying() const;
 
 private:
-    bool launchExternalPlayer(const QString &filePath);
-    QString chooseBestPlayer() const;
-    QStringList buildPlayerArgs(const QString &playerName, const QString &filePath) const;
+    void playFile(const QString &filePath);
+    void playDefaultBeep();
+    QString ensureDefaultBeepFile();
 
-    QSoundEffect *soundEffect_ = nullptr;
-    QProcess *playerProcess_ = nullptr;
+    QMediaPlayer *player_ = nullptr;
+    QAudioOutput *audioOutput_ = nullptr;
     AppSettings settings_;
+    QString defaultBeepPath_;
 };
