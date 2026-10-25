@@ -25,7 +25,8 @@ or in one line
 ```
 rm -rf build && cmake -S . -B build && cmake --build build --parallel && ./build/standUP
 ```
- 
+one line to build and also make deb file ...
+rm -rf build && cmake -S . -B build && cmake --build build --parallel && (cd build && cpack -G DEB) && ./build/standUP
 
 
 
@@ -58,6 +59,7 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: AudioUpdate 0.7.0 added updates to qt6 playback as suggested by Gemini, tested multiple machines 
 * DONE: AudioSounds 0.8.0 Added some extra beeps
 * DONE: AudioSounds2 0.9.0 Changed the order of the should dropdown list 
+* DONE: Installer "0.10.0 updated cmake build package to create deb installer" 
 * 
 * Feature: add flash color choices 
 * Bug: Bring to foreground did not work on my computer called Owl. 

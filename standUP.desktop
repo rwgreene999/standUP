@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=standUP
+Comment=Periodic stand-up and break reminder
+Exec=standUP
+Terminal=false
+Categories=Utility;Clock;
+
