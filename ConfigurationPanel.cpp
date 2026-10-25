@@ -23,7 +23,7 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
 
     layout->addWidget(new QLabel("Notification Sound:", this));
     comboSound_ = new QComboBox(this);
-    comboSound_->addItems({"High Beep", "Low Beep", "Wabble", "Fairy Walk", "Silent", "Custom Audio File"});
+    comboSound_->addItems({"High Beep", "Low Beep", "Wabble", "Fairy Walk", "Whoop Whoop", "Twinkle", "Silent", "Custom Audio File"});
     layout->addWidget(comboSound_);
 
     auto *fileLayout = new QHBoxLayout();
@@ -97,7 +97,19 @@ void ConfigurationPanel::applySettings(const AppSettings &settings)
 {
     const QSignalBlocker themeBlocker(comboTheme_);
     const QSignalBlocker soundBlocker(comboSound_);
-    const QString soundType = (settings.soundType == "Default Beep") ? "High Beep" : settings.soundType;
+    QString soundType = settings.soundType;
+    if (soundType.compare("Default Beep", Qt::CaseInsensitive) == 0)
+    {
+        soundType = "High Beep";
+    }
+    else if (soundType.compare("whoop whoop", Qt::CaseInsensitive) == 0)
+    {
+        soundType = "Whoop Whoop";
+    }
+    else if (soundType.compare("twinkle", Qt::CaseInsensitive) == 0)
+    {
+        soundType = "Twinkle";
+    }
     comboSound_->setCurrentText(soundType);
     txtSoundFile_->setText(settings.customSoundPath);
     chkTopmost_->setChecked(settings.topmost);

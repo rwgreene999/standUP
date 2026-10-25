@@ -164,6 +164,129 @@ QByteArray synthFairyWalk()
     }
     return createWav(samples, sampleRate);
 }
+
+QByteArray synthWhoopWhoop()
+{
+    const int sampleRate = 44100;
+    const double whoopDur = 0.18;
+    const double pauseDur = 0.06;
+    const double totalDur = whoopDur * 2 + pauseDur;
+    const int numSamples = static_cast<int>(totalDur * sampleRate);
+    std::vector<int16_t> samples(numSamples, 0);
+    const double amp = 26000.0;
+
+    for (int cycle = 0; cycle < 2; ++cycle)
+    {
+        const double startT = cycle * (whoopDur + pauseDur);
+        const int startSample = static_cast<int>(startT * sampleRate);
+        const int cycleSamples = static_cast<int>(whoopDur * sampleRate);
+        double phase = 0.0;
+
+        for (int i = 0; i < cycleSamples; ++i)
+        {
+            const int targetIdx = startSample + i;
+            if (targetIdx >= numSamples)
+                break;
+
+            const double u = static_cast<double>(i) / cycleSamples;
+            const double freq = 480.0 + 870.0 * (u * u);
+            phase += 2.0 * M_PI * freq / sampleRate;
+            if (phase > 2.0 * M_PI)
+                phase -= 2.0 * M_PI;
+
+            double env = 1.0;
+            const int attack = static_cast<int>(cycleSamples * 0.08);
+            const int decay = static_cast<int>(cycleSamples * 0.15);
+            if (i < attack)
+                env = static_cast<double>(i) / attack;
+            else if (i > cycleSamples - decay)
+                env = static_cast<double>(cycleSamples - i) / decay;
+
+            const double wave = 0.85 * std::sin(phase) + 0.15 * std::sin(2.0 * phase);
+            samples[targetIdx] = static_cast<int16_t>(amp * env * wave);
+        }
+    }
+    return createWav(samples, sampleRate);
+}
+
+QByteArray synthTwinkle()
+{
+    const int sampleRate = 44100;
+    const std::vector<double> notes = {1760.0, 2093.0, 2637.0, 3136.0, 3520.0, 2637.0, 3520.0};
+    const double stepTime = 0.075;
+    const double totalDur = stepTime * notes.size() + 0.20;
+    const int numSamples = static_cast<int>(totalDur * sampleRate);
+    std::vector<int16_t> samples(numSamples, 0);
+
+    for (size_t n = 0; n < notes.size(); ++n)
+    {
+        const double freq = notes[n];
+        const int startSample = static_cast<int>(n * stepTime * sampleRate);
+        const int noteSamples = static_cast<int>(0.20 * sampleRate);
+        const double noteAmp = 15000.0;
+
+        for (int i = 0; i < noteSamples; ++i)
+        {
+            const int targetIdx = startSample + i;
+            if (targetIdx >= numSamples)
+                break;
+
+            const double t = static_cast<double>(i) / sampleRate;
+            double env = std::exp(-18.0 * t);
+            if (i < sampleRate * 0.002)
+            {
+                env *= (static_cast<double>(i) / (sampleRate * 0.002));
+            }
+            const double shimmer = 1.0 + 0.15 * std::sin(2.0 * M_PI * 18.0 * t);
+            const double wave = std::sin(2.0 * M_PI * freq * t) + 0.25 * std::sin(2.0 * M_PI * (freq * 1.5) * t);
+
+            int32_t val = samples[targetIdx] + static_cast<int32_t>(noteAmp * env * shimmer * wave);
+            if (val > 32767)
+                val = 32767;
+            if (val < -32768)
+                val = -32768;
+            samples[targetIdx] = static_cast<int16_t>(val);
+        }
+    }
+    return createWav(samples, sampleRate);
+}
+
+QString canonicalBuiltInName(const QString &soundName)
+{
+    if (soundName.compare("Default Beep", Qt::CaseInsensitive) == 0 ||
+        soundName.compare("High Beep", Qt::CaseInsensitive) == 0)
+    {
+        return "High Beep";
+    }
+    if (soundName.compare("Low Beep", Qt::CaseInsensitive) == 0)
+    {
+        return "Low Beep";
+    }
+    if (soundName.compare("Wabble", Qt::CaseInsensitive) == 0)
+    {
+        return "Wabble";
+    }
+    if (soundName.compare("Fairy Walk", Qt::CaseInsensitive) == 0)
+    {
+        return "Fairy Walk";
+    }
+    if (soundName.compare("Whoop Whoop", Qt::CaseInsensitive) == 0)
+    {
+        return "Whoop Whoop";
+    }
+    if (soundName.compare("Twinkle", Qt::CaseInsensitive) == 0)
+    {
+        return "Twinkle";
+    }
+    return soundName;
+}
+
+bool isBuiltInSoundName(const QString &soundName)
+{
+    const QString canon = canonicalBuiltInName(soundName);
+    return (canon == "High Beep" || canon == "Low Beep" || canon == "Wabble" ||
+            canon == "Fairy Walk" || canon == "Whoop Whoop" || canon == "Twinkle");
+}
 } // namespace
 
 AudioPlayer::AudioPlayer(QObject *parent)
@@ -206,14 +329,12 @@ void AudioPlayer::playAlert()
 
 void AudioPlayer::playPreview(const QString &soundTypeOrPath)
 {
-    if (soundTypeOrPath.isEmpty() || soundTypeOrPath == "Silent")
+    if (soundTypeOrPath.isEmpty() || soundTypeOrPath.compare("Silent", Qt::CaseInsensitive) == 0)
     {
         return;
     }
 
-    if (soundTypeOrPath == "High Beep" || soundTypeOrPath == "Default Beep" ||
-        soundTypeOrPath == "Low Beep" || soundTypeOrPath == "Wabble" ||
-        soundTypeOrPath == "Fairy Walk")
+    if (isBuiltInSoundName(soundTypeOrPath))
     {
         playBuiltInSound(soundTypeOrPath);
     }
@@ -225,7 +346,7 @@ void AudioPlayer::playPreview(const QString &soundTypeOrPath)
 
 void AudioPlayer::playBuiltInSound(const QString &soundName)
 {
-    const QString name = (soundName == "Default Beep") ? "High Beep" : soundName;
+    const QString name = canonicalBuiltInName(soundName);
     const QString path = ensureBuiltInSoundFile(name);
     if (!path.isEmpty())
     {
@@ -235,11 +356,7 @@ void AudioPlayer::playBuiltInSound(const QString &soundName)
 
 QString AudioPlayer::ensureBuiltInSoundFile(const QString &soundName)
 {
-    QString name = soundName;
-    if (name == "Default Beep")
-    {
-        name = "High Beep";
-    }
+    const QString name = canonicalBuiltInName(soundName);
 
     if (builtInSoundPaths_.contains(name) && QFile::exists(builtInSoundPaths_[name]))
     {
@@ -268,6 +385,16 @@ QString AudioPlayer::ensureBuiltInSoundFile(const QString &soundName)
     {
         fileName = "standUP_fairy_walk.wav";
         wavData = synthFairyWalk();
+    }
+    else if (name == "Whoop Whoop")
+    {
+        fileName = "standUP_whoop_whoop.wav";
+        wavData = synthWhoopWhoop();
+    }
+    else if (name == "Twinkle")
+    {
+        fileName = "standUP_twinkle.wav";
+        wavData = synthTwinkle();
     }
     else
     {
