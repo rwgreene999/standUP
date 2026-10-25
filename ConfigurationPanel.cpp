@@ -23,7 +23,7 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
 
     layout->addWidget(new QLabel("Notification Sound:", this));
     comboSound_ = new QComboBox(this);
-    comboSound_->addItems({"Default Beep", "Silent", "Custom Audio File"});
+    comboSound_->addItems({"High Beep", "Low Beep", "Wabble", "Fairy Walk", "Silent", "Custom Audio File"});
     layout->addWidget(comboSound_);
 
     auto *fileLayout = new QHBoxLayout();
@@ -36,9 +36,9 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
 
     connect(comboSound_, &QComboBox::currentTextChanged, this, [this](const QString &soundType) {
         updateSoundControlsState();
-        if (soundType == "Default Beep")
+        if (soundType != "Silent" && soundType != "Custom Audio File")
         {
-            emit soundPreviewRequested("Default Beep");
+            emit soundPreviewRequested(soundType);
         }
         else if (soundType == "Custom Audio File" && !txtSoundFile_->text().isEmpty())
         {
@@ -97,7 +97,8 @@ void ConfigurationPanel::applySettings(const AppSettings &settings)
 {
     const QSignalBlocker themeBlocker(comboTheme_);
     const QSignalBlocker soundBlocker(comboSound_);
-    comboSound_->setCurrentText(settings.soundType);
+    const QString soundType = (settings.soundType == "Default Beep") ? "High Beep" : settings.soundType;
+    comboSound_->setCurrentText(soundType);
     txtSoundFile_->setText(settings.customSoundPath);
     chkTopmost_->setChecked(settings.topmost);
     chkFlash_->setChecked(settings.flashScreen);

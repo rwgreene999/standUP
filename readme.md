@@ -64,7 +64,6 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 
 
 * add more theses for kicks
-* test system sounds, maybe add more 
 * provide some cool sounds 
 
 * Feature: AlertMessage In settings, allow user options for alert 
