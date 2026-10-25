@@ -23,7 +23,7 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
 
     layout->addWidget(new QLabel("Notification Sound:", this));
     comboSound_ = new QComboBox(this);
-    comboSound_->addItems({"High Beep", "Low Beep", "Wabble", "Fairy Walk", "Whoop Whoop", "Twinkle", "Silent", "Custom Audio File"});
+    comboSound_->addItems({"Silent", "Custom Audio File", "High Beep", "Low Beep", "Wabble", "Fairy Walk", "Whoop Whoop", "Twinkle"});
     layout->addWidget(comboSound_);
 
     auto *fileLayout = new QHBoxLayout();
@@ -34,7 +34,8 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
     fileLayout->addWidget(btnBrowseSound_);
     layout->addLayout(fileLayout);
 
-    connect(comboSound_, &QComboBox::currentTextChanged, this, [this](const QString &soundType) {
+    connect(comboSound_, &QComboBox::currentTextChanged, this, [this](const QString &soundType)
+            {
         updateSoundControlsState();
         if (soundType != "Silent" && soundType != "Custom Audio File")
         {
@@ -43,8 +44,7 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
         else if (soundType == "Custom Audio File" && !txtSoundFile_->text().isEmpty())
         {
             emit soundPreviewRequested(txtSoundFile_->text());
-        }
-    });
+        } });
 
     connect(btnBrowseSound_, &QPushButton::clicked, this, &ConfigurationPanel::browseForSound);
     updateSoundControlsState();
