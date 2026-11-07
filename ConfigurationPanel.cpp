@@ -23,7 +23,7 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
 
     layout->addWidget(new QLabel("Notification Sound:", this));
     comboSound_ = new QComboBox(this);
-    comboSound_->addItems({"Silent", "Custom Audio File", "High Beep", "Low Beep", "Wabble", "Fairy Walk", "Whoop Whoop", "Twinkle"});
+    comboSound_->addItems({"Silent", "Custom Audio File", "High Beep", "Low Beep", "Triple Low Beep", "Frog", "Hummingbird", "Sonar Ping", "Wind Chime", "Wabble", "Fairy Walk", "Whoop Whoop", "Twinkle"});
     layout->addWidget(comboSound_);
 
     auto *fileLayout = new QHBoxLayout();
@@ -60,7 +60,7 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
     layout->addSpacing(10);
     layout->addWidget(new QLabel("Color Theme:", this));
     comboTheme_ = new QComboBox(this);
-    comboTheme_->addItems({"Dark", "Light", "Red", "Green", "Sunset", "Sunrise"});
+    comboTheme_->addItems({"Dark", "Light", "Red", "Green", "Sunset", "Sunrise", "Spring", "Ocean", "Brown", "Ice"});
     layout->addWidget(comboTheme_);
 
     connect(comboTheme_, &QComboBox::currentTextChanged, this, &ConfigurationPanel::themePreviewRequested);
@@ -102,13 +102,13 @@ void ConfigurationPanel::applySettings(const AppSettings &settings)
     {
         soundType = "High Beep";
     }
-    else if (soundType.compare("whoop whoop", Qt::CaseInsensitive) == 0)
+    for (int i = 0; i < comboSound_->count(); ++i)
     {
-        soundType = "Whoop Whoop";
-    }
-    else if (soundType.compare("twinkle", Qt::CaseInsensitive) == 0)
-    {
-        soundType = "Twinkle";
+        if (comboSound_->itemText(i).compare(soundType, Qt::CaseInsensitive) == 0)
+        {
+            soundType = comboSound_->itemText(i);
+            break;
+        }
     }
     comboSound_->setCurrentText(soundType);
     txtSoundFile_->setText(settings.customSoundPath);

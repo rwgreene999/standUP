@@ -251,6 +251,265 @@ QByteArray synthTwinkle()
     return createWav(samples, sampleRate);
 }
 
+QByteArray synthTripleLowBeep()
+{
+    const int sampleRate = 44100;
+    const double beepDur = 0.16;
+    const double gapDur = 0.08;
+    const int numBeeps = 3;
+    const double totalDur = numBeeps * beepDur + (numBeeps - 1) * gapDur + 0.05;
+    const int numSamples = static_cast<int>(totalDur * sampleRate);
+    std::vector<int16_t> samples(numSamples, 0);
+    const double amp = 26000.0;
+
+    for (int b = 0; b < numBeeps; ++b)
+    {
+        const int startSample = static_cast<int>(b * (beepDur + gapDur) * sampleRate);
+        const int beepSamples = static_cast<int>(beepDur * sampleRate);
+        const int attack = static_cast<int>(sampleRate * 0.015);
+        const int decay = static_cast<int>(sampleRate * 0.035);
+
+        for (int i = 0; i < beepSamples; ++i)
+        {
+            const int targetIdx = startSample + i;
+            if (targetIdx >= numSamples)
+                break;
+            const double t = static_cast<double>(i) / sampleRate;
+
+            double env = 1.0;
+            if (i < attack)
+                env = static_cast<double>(i) / attack;
+            else if (i > beepSamples - decay)
+                env = static_cast<double>(beepSamples - i) / decay;
+
+            const double wave = 0.85 * std::sin(2.0 * M_PI * 180.0 * t) + 0.15 * std::sin(2.0 * M_PI * 360.0 * t);
+            samples[targetIdx] = static_cast<int16_t>(amp * env * wave);
+        }
+    }
+    return createWav(samples, sampleRate);
+}
+
+QByteArray synthFrog()
+{
+    const int sampleRate = 44100;
+    const double croak1Dur = 0.16;
+    const double gapDur = 0.07;
+    const double croak2Dur = 0.32;
+    const double totalDur = croak1Dur + gapDur + croak2Dur + 0.1;
+    const int numSamples = static_cast<int>(totalDur * sampleRate);
+    std::vector<int16_t> samples(numSamples, 0);
+
+    struct CroakPart
+    {
+        double start;
+        double dur;
+        double baseFreq;
+        double endFreq;
+        double rate;
+    };
+    CroakPart parts[2] = {
+        {0.0, croak1Dur, 130.0, 160.0, 45.0},
+        {croak1Dur + gapDur, croak2Dur, 120.0, 95.0, 38.0}
+    };
+
+    for (int p = 0; p < 2; ++p)
+    {
+        const int startSample = static_cast<int>(parts[p].start * sampleRate);
+        const int partSamples = static_cast<int>(parts[p].dur * sampleRate);
+        double phase = 0.0;
+        double pulsePhase = 0.0;
+
+        for (int i = 0; i < partSamples; ++i)
+        {
+            const int targetIdx = startSample + i;
+            if (targetIdx >= numSamples)
+                break;
+            const double progress = static_cast<double>(i) / partSamples;
+
+            const double freq = parts[p].baseFreq + (parts[p].endFreq - parts[p].baseFreq) * progress;
+            phase += 2.0 * M_PI * freq / sampleRate;
+            if (phase > 2.0 * M_PI)
+                phase -= 2.0 * M_PI;
+
+            pulsePhase += 2.0 * M_PI * parts[p].rate / sampleRate;
+            if (pulsePhase > 2.0 * M_PI)
+                pulsePhase -= 2.0 * M_PI;
+
+            double rasp = 0.5 + 0.5 * std::cos(pulsePhase);
+            rasp = std::pow(rasp, 1.8);
+
+            const double form1 = std::sin(phase);
+            const double form2 = 0.4 * std::sin(phase * 2.3);
+            const double form3 = 0.25 * std::sin(phase * 4.7);
+
+            double env = 1.0;
+            const int attack = static_cast<int>(partSamples * 0.12);
+            const int decay = static_cast<int>(partSamples * 0.25);
+            if (i < attack)
+                env = static_cast<double>(i) / attack;
+            else if (i > partSamples - decay)
+                env = static_cast<double>(partSamples - i) / decay;
+
+            const double wave = (form1 + form2 + form3) * rasp;
+            double val = 25000.0 * env * wave;
+            if (val > 32767.0)
+                val = 32767.0;
+            if (val < -32768.0)
+                val = -32768.0;
+            samples[targetIdx] = static_cast<int16_t>(val);
+        }
+    }
+    return createWav(samples, sampleRate);
+}
+
+QByteArray synthHummingbird()
+{
+    const int sampleRate = 44100;
+    const double totalDur = 5.0; // 5 seconds
+    const int numSamples = static_cast<int>(totalDur * sampleRate);
+    std::vector<int16_t> samples(numSamples, 0);
+
+    struct Chirp
+    {
+        double time;
+        double freq1;
+        double freq2;
+        double dur;
+    };
+    std::vector<Chirp> chirps = {
+        {0.8, 3200.0, 4100.0, 0.08},
+        {1.9, 3600.0, 4400.0, 0.07},
+        {3.1, 3300.0, 4200.0, 0.09},
+        {4.2, 3500.0, 4500.0, 0.08}
+    };
+
+    double wingPhase = 0.0;
+    for (int i = 0; i < numSamples; ++i)
+    {
+        const double t = static_cast<double>(i) / sampleRate;
+
+        const double flutterFreq = 68.0 + 3.0 * std::sin(2.0 * M_PI * 1.5 * t);
+        wingPhase += 2.0 * M_PI * flutterFreq / sampleRate;
+        if (wingPhase > 2.0 * M_PI)
+            wingPhase -= 2.0 * M_PI;
+
+        const double wingTone = 0.5 * std::sin(wingPhase)
+                              + 0.3 * std::sin(2.0 * wingPhase)
+                              + 0.15 * std::sin(3.0 * wingPhase)
+                              + 0.08 * std::sin(4.0 * wingPhase);
+
+        const double hoverWobble = 0.85 + 0.15 * std::sin(2.0 * M_PI * 11.0 * t);
+
+        double overallEnv = 1.0;
+        if (t < 0.2)
+            overallEnv = t / 0.2;
+        else if (t > 4.7)
+            overallEnv = (5.0 - t) / 0.3;
+
+        double sampleVal = 14000.0 * overallEnv * hoverWobble * wingTone;
+
+        for (const auto &c : chirps)
+        {
+            if (t >= c.time && t <= c.time + c.dur)
+            {
+                const double dt = t - c.time;
+                const double u = dt / c.dur;
+                const double chirpFreq = c.freq1 + (c.freq2 - c.freq1) * u;
+                const double chirpEnv = std::sin(M_PI * u);
+                const double chirpWave = std::sin(2.0 * M_PI * chirpFreq * dt);
+                sampleVal += 12000.0 * chirpEnv * chirpWave;
+            }
+        }
+
+        if (sampleVal > 32767.0)
+            sampleVal = 32767.0;
+        if (sampleVal < -32768.0)
+            sampleVal = -32768.0;
+        samples[i] = static_cast<int16_t>(sampleVal);
+    }
+    return createWav(samples, sampleRate);
+}
+
+QByteArray synthSonarPing()
+{
+    const int sampleRate = 44100;
+    const double totalDur = 1.8;
+    const int numSamples = static_cast<int>(totalDur * sampleRate);
+    std::vector<int16_t> samples(numSamples, 0);
+
+    const double pingFreq = 920.0;
+    for (int i = 0; i < numSamples; ++i)
+    {
+        const double t = static_cast<double>(i) / sampleRate;
+        const double attack = (i < sampleRate * 0.008) ? (static_cast<double>(i) / (sampleRate * 0.008)) : 1.0;
+        const double decay = std::exp(-2.8 * t);
+
+        const double wave = 0.85 * std::sin(2.0 * M_PI * pingFreq * t)
+                          + 0.10 * std::sin(2.0 * M_PI * (pingFreq * 0.5) * t)
+                          + 0.05 * std::sin(2.0 * M_PI * (pingFreq * 2.0) * t);
+
+        double val = 26000.0 * attack * decay * wave;
+        if (val > 32767.0)
+            val = 32767.0;
+        if (val < -32768.0)
+            val = -32768.0;
+        samples[i] = static_cast<int16_t>(val);
+    }
+    return createWav(samples, sampleRate);
+}
+
+QByteArray synthWindChime()
+{
+    const int sampleRate = 44100;
+    const double totalDur = 2.0;
+    const int numSamples = static_cast<int>(totalDur * sampleRate);
+    std::vector<int16_t> samples(numSamples, 0);
+
+    struct ChimeStrike
+    {
+        double time;
+        double freq;
+        double amp;
+    };
+    std::vector<ChimeStrike> strikes = {
+        {0.00, 1318.5, 9000.0},
+        {0.12, 1975.5, 8000.0},
+        {0.25, 2489.0, 7500.0},
+        {0.42, 1661.2, 8500.0},
+        {0.65, 2960.0, 7000.0},
+        {0.85, 1975.5, 6500.0},
+        {1.05, 1318.5, 6000.0}
+    };
+
+    for (const auto &s : strikes)
+    {
+        const int startSample = static_cast<int>(s.time * sampleRate);
+        const int strikeSamples = static_cast<int>((totalDur - s.time) * sampleRate);
+
+        for (int i = 0; i < strikeSamples; ++i)
+        {
+            const int targetIdx = startSample + i;
+            if (targetIdx >= numSamples)
+                break;
+            const double t = static_cast<double>(i) / sampleRate;
+
+            const double attack = (i < sampleRate * 0.003) ? (static_cast<double>(i) / (sampleRate * 0.003)) : 1.0;
+            const double decay = std::exp(-4.2 * t);
+
+            const double wave = 0.8 * std::sin(2.0 * M_PI * s.freq * t)
+                              + 0.2 * std::sin(2.0 * M_PI * (s.freq * 2.76) * t);
+
+            int32_t val = samples[targetIdx] + static_cast<int32_t>(s.amp * attack * decay * wave);
+            if (val > 32767)
+                val = 32767;
+            if (val < -32768)
+                val = -32768;
+            samples[targetIdx] = static_cast<int16_t>(val);
+        }
+    }
+    return createWav(samples, sampleRate);
+}
+
 QString canonicalBuiltInName(const QString &soundName)
 {
     if (soundName.compare("Default Beep", Qt::CaseInsensitive) == 0 ||
@@ -261,6 +520,27 @@ QString canonicalBuiltInName(const QString &soundName)
     if (soundName.compare("Low Beep", Qt::CaseInsensitive) == 0)
     {
         return "Low Beep";
+    }
+    if (soundName.compare("Triple Low Beep", Qt::CaseInsensitive) == 0 ||
+        soundName.compare("Low Beep 3x", Qt::CaseInsensitive) == 0)
+    {
+        return "Triple Low Beep";
+    }
+    if (soundName.compare("Frog", Qt::CaseInsensitive) == 0)
+    {
+        return "Frog";
+    }
+    if (soundName.compare("Hummingbird", Qt::CaseInsensitive) == 0)
+    {
+        return "Hummingbird";
+    }
+    if (soundName.compare("Sonar Ping", Qt::CaseInsensitive) == 0)
+    {
+        return "Sonar Ping";
+    }
+    if (soundName.compare("Wind Chime", Qt::CaseInsensitive) == 0)
+    {
+        return "Wind Chime";
     }
     if (soundName.compare("Wabble", Qt::CaseInsensitive) == 0)
     {
@@ -284,8 +564,10 @@ QString canonicalBuiltInName(const QString &soundName)
 bool isBuiltInSoundName(const QString &soundName)
 {
     const QString canon = canonicalBuiltInName(soundName);
-    return (canon == "High Beep" || canon == "Low Beep" || canon == "Wabble" ||
-            canon == "Fairy Walk" || canon == "Whoop Whoop" || canon == "Twinkle");
+    return (canon == "High Beep" || canon == "Low Beep" || canon == "Triple Low Beep" ||
+            canon == "Frog" || canon == "Hummingbird" || canon == "Sonar Ping" ||
+            canon == "Wind Chime" || canon == "Wabble" || canon == "Fairy Walk" ||
+            canon == "Whoop Whoop" || canon == "Twinkle");
 }
 } // namespace
 
@@ -375,6 +657,31 @@ QString AudioPlayer::ensureBuiltInSoundFile(const QString &soundName)
     {
         fileName = "standUP_low_beep.wav";
         wavData = synthLowBeep();
+    }
+    else if (name == "Triple Low Beep")
+    {
+        fileName = "standUP_triple_low_beep.wav";
+        wavData = synthTripleLowBeep();
+    }
+    else if (name == "Frog")
+    {
+        fileName = "standUP_frog.wav";
+        wavData = synthFrog();
+    }
+    else if (name == "Hummingbird")
+    {
+        fileName = "standUP_hummingbird.wav";
+        wavData = synthHummingbird();
+    }
+    else if (name == "Sonar Ping")
+    {
+        fileName = "standUP_sonar_ping.wav";
+        wavData = synthSonarPing();
+    }
+    else if (name == "Wind Chime")
+    {
+        fileName = "standUP_wind_chime.wav";
+        wavData = synthWindChime();
     }
     else if (name == "Wabble")
     {
