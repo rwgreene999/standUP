@@ -15,12 +15,14 @@ class MainScreen;
 class ConfigurationPanel;
 class AudioPlayer;
 class SystemAlert;
+class StopwatchWindow;
 
 class standUP : public QWidget
 {
     Q_OBJECT
 public:
     explicit standUP(QWidget *parent = nullptr);
+    ~standUP() override;
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
@@ -39,6 +41,8 @@ private slots:
     void onThemePreview(const QString &theme);
     void showSettings();
     void showMainScreen();
+    void onOpenStopwatch();
+    void onBeginStopwatch();
 
 private:
     void startTimerExecution();
@@ -48,6 +52,7 @@ private:
     QStackedWidget *stackedWidget_ = nullptr;
     MainScreen *mainScreen_ = nullptr;
     ConfigurationPanel *configPanel_ = nullptr;
+    StopwatchWindow *stopwatchWindow_ = nullptr;
     QTimer *clockTimer_ = nullptr;
     QTimer *countdownTimer_ = nullptr;
     QDateTime expireDateTime_;

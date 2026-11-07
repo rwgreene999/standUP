@@ -68,6 +68,7 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: Installer "0.10.0 updated cmake build package to create deb installer" 
 * DONE: readme "0.11.0 updated readme" 
 * DONE: ChangeTimes "0.12.0 change time buttons to more meaningful data"
+* DONE: AddStopwatch "0.13.0 Add stopwatch functionality, Buttons and second panel  "
 
 ## where this is going 
 * Feature: add flash color choices 
