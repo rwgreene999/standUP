@@ -1,12 +1,18 @@
 # What this project is about
 
-THIS IS A WORK IN PROGRESS, NOT COMPLETE
+This is working code!
   
-This is a small Qt desktop app, built around main.cpp, called “Chair Reminder.” Its purpose is to help someone avoid sitting too long by setting a timer and reminding them to take a break or stand up.
+This is a small Qt desktop app, built around main.cpp, called “Chair Reminder.” Its purpose is to help someone avoid sitting too long by setting a timer and reminding them to take a break and standUP.
 
-## this is Version 0.1 
-This is the first prototype of this program for linux.  After switching to linux, I 
-abandoned TimeToy a rich windows app, also on Github. I wanted to move back to my roots, with cpp.  
+* Runit with: standUP 
+* Push a button to get notified in 30 minutes or one hour or other options  
+* Get to work, this will notify you when the time is up
+* for fun, go to settings, pick sound for the for your notification, or colors 
+
+## this is Version 0.11
+A working Linux program.  After switching to linux, I 
+abandoned TimeToy a rich Windows app, also on Github. 
+I wanted to move back to my roots, with cpp.  
 
 ## Build and run: 
 
@@ -18,8 +24,7 @@ It uses cmake which you might need to install: ( sudo apt install cmake )
 cd /home/rwg/projects/standUP
 rm -rf build
 cmake -S . -B build
-cmake --build build 
---parallel
+cmake --build build --parallel
 ```
 or in one line 
 ```
@@ -32,9 +37,9 @@ rm -rf build && cmake -S . -B build && cmake --build build --parallel && (cd bui
 
 
 ## to play music 
-If you choose to play music when the standUP alert happens, 
-this app tries some standard methods 
-The app tries to find an installed player such as:
+Not sure I understand Linux sound processing, 
+but I use qt6 which is supposed to handle this for me.  
+Before switching sound to qt6, the app would tries to find an installed player such as:
 
     ffplay
     vlc
@@ -44,6 +49,7 @@ The app tries to find an installed player such as:
     mplayer
 
 Also I had to install and use pavucontrol to see what I was playing music to a device that was not connected to my machine and force it to use the headset which was the external speakers.  
+
 
 ## where this  is going 
 
@@ -60,9 +66,10 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: AudioSounds 0.8.0 Added some extra beeps
 * DONE: AudioSounds2 0.9.0 Changed the order of the should dropdown list 
 * DONE: Installer "0.10.0 updated cmake build package to create deb installer" 
-* 
+
+
 * Feature: add flash color choices 
-* Bug: Bring to foreground did not work on my computer called Owl. 
+* Bug: Bring to foreground done not always work
 * Feature: AlertMessage In settings, allow user options for alert 
 * Feature: RepeatAlert Add a repeat button, stop current alert and start new one 
 * 
