@@ -80,12 +80,25 @@ MainScreen::MainScreen(QWidget *parent)
     connect(btnSettings_, &QPushButton::clicked, this, &MainScreen::settingsRequested);
 
     btnPauseResume_->setEnabled(false);
+
+    auto *stopwatchLayout = new QHBoxLayout();
+    btnStopwatch_ = new QPushButton("Stopwatch", this);
+    btnBeginStopwatch_ = new QPushButton("Begin Stopwatch", this);
+
+    stopwatchLayout->addWidget(btnStopwatch_);
+    stopwatchLayout->addWidget(btnBeginStopwatch_);
+    layout->addLayout(stopwatchLayout);
+
+    connect(btnStopwatch_, &QPushButton::clicked, this, &MainScreen::stopwatchRequested);
+    connect(btnBeginStopwatch_, &QPushButton::clicked, this, &MainScreen::beginStopwatchRequested);
 }
 
 QLineEdit *MainScreen::timeInput() const { return txtInputTime_; }
 QPushButton *MainScreen::goStopButton() const { return btnGoStop_; }
 QPushButton *MainScreen::pauseResumeButton() const { return btnPauseResume_; }
 QPushButton *MainScreen::settingsButton() const { return btnSettings_; }
+QPushButton *MainScreen::stopwatchButton() const { return btnStopwatch_; }
+QPushButton *MainScreen::beginStopwatchButton() const { return btnBeginStopwatch_; }
 QLabel *MainScreen::currentTimeLabel() const { return lblCurrentTime_; }
 QLabel *MainScreen::expireTimeLabel() const { return lblExpireTime_; }
 QLabel *MainScreen::statusLabel() const { return lblStatus_; }

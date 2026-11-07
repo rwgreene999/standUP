@@ -12,13 +12,14 @@
 #include "AudioPlayer.h"
 #include "ConfigurationPanel.h"
 #include "MainScreen.h"
+#include "StopwatchWindow.h"
 #include "SystemAlert.h"
 
 standUP::standUP(QWidget *parent)
     : QWidget(parent)
 {
     setWindowTitle(QString("standUP v%1").arg(APP_VERSION));
-    resize(360, 320);
+    resize(360, 360);
 
     qApp->installEventFilter(this);
 
@@ -49,6 +50,8 @@ standUP::standUP(QWidget *parent)
     connect(mainScreen_, &MainScreen::pauseResumeRequested, this, &standUP::onTogglePauseResume);
     connect(mainScreen_, &MainScreen::settingsRequested, this, &standUP::showSettings);
     connect(mainScreen_, &MainScreen::addMinutesRequested, this, &standUP::onAddMinutes);
+    connect(mainScreen_, &MainScreen::stopwatchRequested, this, &standUP::onOpenStopwatch);
+    connect(mainScreen_, &MainScreen::beginStopwatchRequested, this, &standUP::onBeginStopwatch);
     connect(configPanel_, &ConfigurationPanel::saveRequested, this, &standUP::saveSettings);
     connect(configPanel_, &ConfigurationPanel::applyRequested, this, &standUP::applySettings);
     connect(configPanel_, &ConfigurationPanel::cancelRequested, this, &standUP::cancelSettings);
@@ -63,6 +66,16 @@ standUP::standUP(QWidget *parent)
     systemAlert_->configure(settings_, normalStyleSheet_);
     applyTheme();
     updateClock();
+}
+
+standUP::~standUP()
+{
+    if (stopwatchWindow_)
+    {
+        stopwatchWindow_->close();
+        delete stopwatchWindow_;
+        stopwatchWindow_ = nullptr;
+    }
 }
 
 bool standUP::eventFilter(QObject *watched, QEvent *event)
@@ -306,6 +319,31 @@ void standUP::showMainScreen()
     stackedWidget_->setCurrentIndex(0);
 }
 
+void standUP::onOpenStopwatch()
+{
+    if (!stopwatchWindow_)
+    {
+        stopwatchWindow_ = new StopwatchWindow();
+        stopwatchWindow_->setStyleSheet(normalStyleSheet_);
+    }
+    stopwatchWindow_->show();
+    stopwatchWindow_->raise();
+    stopwatchWindow_->activateWindow();
+}
+
+void standUP::onBeginStopwatch()
+{
+    if (!stopwatchWindow_)
+    {
+        stopwatchWindow_ = new StopwatchWindow();
+        stopwatchWindow_->setStyleSheet(normalStyleSheet_);
+    }
+    stopwatchWindow_->show();
+    stopwatchWindow_->raise();
+    stopwatchWindow_->activateWindow();
+    stopwatchWindow_->startStopwatch();
+}
+
 void standUP::startTimerExecution()
 {
     if (isAlerting_)
@@ -394,5 +432,9 @@ void standUP::applyTheme(const QString &themeName)
 
     normalStyleSheet_ = qss;
     setStyleSheet(qss);
+    if (stopwatchWindow_)
+    {
+        stopwatchWindow_->setStyleSheet(qss);
+    }
     systemAlert_->configure(settings_, normalStyleSheet_);
 }
