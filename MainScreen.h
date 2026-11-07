@@ -20,10 +20,10 @@ public:
     QLabel *currentTimeLabel() const;
     QLabel *expireTimeLabel() const;
     QLabel *statusLabel() const;
-    QPushButton *addButton1() const;
-    QPushButton *addButton5() const;
     QPushButton *addButton10() const;
     QPushButton *addButton30() const;
+    QPushButton *addButton1Hour() const;
+    QPushButton *addButton2Hours() const;
 
 signals:
     void applyInputRequested();
@@ -40,8 +40,8 @@ private:
     QLabel *lblCurrentTime_ = nullptr;
     QLabel *lblExpireTime_ = nullptr;
     QLabel *lblStatus_ = nullptr;
-    QPushButton *btnAdd1_ = nullptr;
-    QPushButton *btnAdd5_ = nullptr;
     QPushButton *btnAdd10_ = nullptr;
     QPushButton *btnAdd30_ = nullptr;
+    QPushButton *btnAdd1Hour_ = nullptr;
+    QPushButton *btnAdd2Hours_ = nullptr;
 };

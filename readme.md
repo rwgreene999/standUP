@@ -51,7 +51,7 @@ Before switching sound to qt6, the app would tries to find an installed player s
 Also I had to install and use pavucontrol to see what I was playing music to a device that was not connected to my machine and force it to use the headset which was the external speakers.  
 
 
-## where this  is going 
+## where this has gone 
 
 * DONE: make smaller window 
 * DONE: On flash alert, click anywhere to end flash
@@ -66,8 +66,10 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: AudioSounds 0.8.0 Added some extra beeps
 * DONE: AudioSounds2 0.9.0 Changed the order of the should dropdown list 
 * DONE: Installer "0.10.0 updated cmake build package to create deb installer" 
+* DONE: readme "0.11.0 updated readme" 
+* DONE: ChangeTimes "0.12.0 change time buttons to more meaningful data"
 
-
+## where this is going 
 * Feature: add flash color choices 
 * Bug: Bring to foreground done not always work
 * Feature: AlertMessage In settings, allow user options for alert 
