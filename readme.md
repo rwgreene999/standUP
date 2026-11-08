@@ -31,8 +31,9 @@ or in one line
 rm -rf build && cmake -S . -B build && cmake --build build --parallel && ./build/standUP
 ```
 one line to build and also make deb file ...
+```
 rm -rf build && cmake -S . -B build && cmake --build build --parallel && (cd build && cpack -G DEB) && ./build/standUP
-
+```
 
 
 
@@ -70,6 +71,7 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: ChangeTimes "0.12.0 change time buttons to more meaningful data"
 * DONE: AddStopwatch "0.13.0 Add stopwatch functionality, Buttons and second panel  "
 * Done: RazzleDazzle "0.14.0 Add more sounds and colors" 
+* DONE: Icon "0.15.0 first use of opencode-Big Pickle in code to create icon"
 
 ## where this is going 
 * Feature: add flash color choices 
