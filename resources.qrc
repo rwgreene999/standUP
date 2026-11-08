@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="standUP-16.png">icons/png/standUP-16.png</file>
+        <file alias="standUP-24.png">icons/png/standUP-24.png</file>
+        <file alias="standUP-32.png">icons/png/standUP-32.png</file>
+        <file alias="standUP-48.png">icons/png/standUP-48.png</file>
+        <file alias="standUP-64.png">icons/png/standUP-64.png</file>
+        <file alias="standUP-128.png">icons/png/standUP-128.png</file>
+        <file alias="standUP-256.png">icons/png/standUP-256.png</file>
+        <file alias="standUP-512.png">icons/png/standUP-512.png</file>
+    </qresource>
+</RCC>

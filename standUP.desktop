@@ -1,8 +1,11 @@
 [Desktop Entry]
 Type=Application
 Name=standUP
+GenericName=Break Reminder
 Comment=Periodic stand-up and break reminder
 Exec=standUP
+Icon=standUP
 Terminal=false
 Categories=Utility;Clock;
-
+Keywords=stand;break;reminder;timer;stopwatch;
+StartupWMClass=standUP

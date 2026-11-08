@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(standUP VERSION 0.14.0 LANGUAGES CXX)
+project(standUP VERSION 0.15.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -12,6 +12,7 @@ set(CMAKE_AUTOUIC ON)
 
 add_executable(standUP
     main.cpp
+    resources.qrc
     AppSettings.h
     AudioPlayer.h
     AudioPlayer.cpp
@@ -45,6 +46,17 @@ install(TARGETS standUP
 install(FILES standUP.desktop
     DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
 )
+
+# Icons for the desktop environment (hicolor theme, used by the .desktop file)
+install(FILES icons/standUP.svg
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
+)
+foreach(icon_size 16 24 32 48 64 128 256 512)
+    install(FILES icons/png/standUP-${icon_size}.png
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${icon_size}x${icon_size}/apps
+        RENAME standUP.png
+    )
+endforeach()
 
 # CPack configuration for generating .deb packages
 set(CPACK_PACKAGE_NAME "standup")
