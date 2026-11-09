@@ -72,6 +72,7 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: AddStopwatch "0.13.0 Add stopwatch functionality, Buttons and second panel  "
 * Done: RazzleDazzle "0.14.0 Add more sounds and colors" 
 * DONE: Icon "0.15.0 first use of opencode-Big Pickle in code to create icon"
+* DONE: RazzleDazzle2 "0.16.0 option of random for color or sound"
 
 ## where this is going 
 * Feature: add flash color choices 

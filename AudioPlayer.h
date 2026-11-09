@@ -2,6 +2,7 @@
 
 #include <QMap>
 #include <QObject>
+#include <QStringList>
 
 #include "AppSettings.h"
 
@@ -24,10 +25,13 @@ public:
 private:
     void playFile(const QString &filePath);
     void playBuiltInSound(const QString &soundName);
+    void playRandomSound();
+    QStringList randomSoundPool() const;
     QString ensureBuiltInSoundFile(const QString &soundName);
 
     QMediaPlayer *player_ = nullptr;
     QAudioOutput *audioOutput_ = nullptr;
     AppSettings settings_;
     QMap<QString, QString> builtInSoundPaths_;
+    QString lastRandomSound_;
 };

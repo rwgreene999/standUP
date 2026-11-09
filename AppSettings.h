@@ -7,9 +7,31 @@
 #include <QJsonObject>
 #include <QStandardPaths>
 #include <QString>
+#include <QStringList>
 
 struct AppSettings
 {
+    // Concrete choices (the "Random" entries are added by the settings panel).
+    static const QStringList &themeNames()
+    {
+        static const QStringList names = {
+            "Dark", "Light", "Red", "Green", "Sunset",
+            "Sunrise", "Spring", "Ocean", "Brown", "Ice"};
+        return names;
+    }
+
+    static QString randomThemeName() { return QStringLiteral("Random"); }
+
+    static const QStringList &builtInSoundNames()
+    {
+        static const QStringList names = {
+            "High Beep", "Low Beep", "Triple Low Beep", "Frog", "Hummingbird",
+            "Sonar Ping", "Wind Chime", "Wabble", "Fairy Walk", "Whoop Whoop", "Twinkle"};
+        return names;
+    }
+
+    static QString randomSoundName() { return QStringLiteral("Random Sound"); }
+
     QString soundType = "High Beep";
     QString customSoundPath;
     bool topmost = false;
