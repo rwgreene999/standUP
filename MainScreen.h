@@ -6,6 +6,7 @@ class QLabel;
 class QLineEdit;
 class QPushButton;
 class QStackedWidget;
+class QToolButton;
 
 class MainScreen : public QWidget
 {
@@ -16,7 +17,7 @@ public:
     QLineEdit *timeInput() const;
     QPushButton *goStopButton() const;
     QPushButton *pauseResumeButton() const;
-    QPushButton *settingsButton() const;
+    QToolButton *settingsButton() const;
     QLabel *currentTimeLabel() const;
     QLabel *expireTimeLabel() const;
     QLabel *statusLabel() const;
@@ -40,7 +41,7 @@ private:
     QLineEdit *txtInputTime_ = nullptr;
     QPushButton *btnGoStop_ = nullptr;
     QPushButton *btnPauseResume_ = nullptr;
-    QPushButton *btnSettings_ = nullptr;
+    QToolButton *btnSettings_ = nullptr;
     QPushButton *btnStopwatch_ = nullptr;
     QPushButton *btnBeginStopwatch_ = nullptr;
     QLabel *lblCurrentTime_ = nullptr;
