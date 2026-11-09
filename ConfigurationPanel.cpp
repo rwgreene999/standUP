@@ -23,7 +23,9 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
 
     layout->addWidget(new QLabel("Notification Sound:", this));
     comboSound_ = new QComboBox(this);
-    comboSound_->addItems({"Silent", "Custom Audio File", "High Beep", "Low Beep", "Triple Low Beep", "Frog", "Hummingbird", "Sonar Ping", "Wind Chime", "Wabble", "Fairy Walk", "Whoop Whoop", "Twinkle"});
+    QStringList soundItems{"Silent", "Custom Audio File", AppSettings::randomSoundName()};
+    soundItems << AppSettings::builtInSoundNames();
+    comboSound_->addItems(soundItems);
     layout->addWidget(comboSound_);
 
     auto *fileLayout = new QHBoxLayout();
@@ -60,7 +62,8 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
     layout->addSpacing(10);
     layout->addWidget(new QLabel("Color Theme:", this));
     comboTheme_ = new QComboBox(this);
-    comboTheme_->addItems({"Dark", "Light", "Red", "Green", "Sunset", "Sunrise", "Spring", "Ocean", "Brown", "Ice"});
+    comboTheme_->addItems(AppSettings::themeNames());
+    comboTheme_->addItem(AppSettings::randomThemeName());
     layout->addWidget(comboTheme_);
 
     connect(comboTheme_, &QComboBox::currentTextChanged, this, &ConfigurationPanel::themePreviewRequested);

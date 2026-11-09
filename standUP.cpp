@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include <QEvent>
 #include <QMessageBox>
+#include <QRandomGenerator>
 #include <QStackedWidget>
 #include <QTimer>
 #include <QTime>
@@ -60,6 +61,7 @@ standUP::standUP(QWidget *parent)
             { audioPlayer_->playPreview(filePath); });
 
     settings_.load();
+    sessionTheme_ = (settings_.theme == AppSettings::randomThemeName()) ? pickRandomTheme() : settings_.theme;
     configPanel_->applySettings(settings_);
 
     audioPlayer_->configure(settings_);
@@ -277,7 +279,9 @@ void standUP::onAddMinutes(int minutes)
 
 void standUP::saveSettings()
 {
+    const QString previousTheme = settings_.theme;
     settings_ = configPanel_->settings();
+    updateSessionTheme(previousTheme);
     settings_.save();
     audioPlayer_->configure(settings_);
     systemAlert_->configure(settings_, normalStyleSheet_);
@@ -287,7 +291,9 @@ void standUP::saveSettings()
 
 void standUP::applySettings()
 {
+    const QString previousTheme = settings_.theme;
     settings_ = configPanel_->settings();
+    updateSessionTheme(previousTheme);
     audioPlayer_->configure(settings_);
     systemAlert_->configure(settings_, normalStyleSheet_);
     applyTheme();
@@ -380,6 +386,10 @@ void standUP::stopTimer()
 void standUP::applyTheme(const QString &themeName)
 {
     QString theme = themeName.isEmpty() ? settings_.theme : themeName;
+    if (theme == AppSettings::randomThemeName())
+    {
+        theme = sessionTheme_;
+    }
     QString qss;
     if (theme == "Dark")
     {
@@ -469,4 +479,24 @@ void standUP::applyTheme(const QString &themeName)
         stopwatchWindow_->setStyleSheet(qss);
     }
     systemAlert_->configure(settings_, normalStyleSheet_);
+}
+
+QString standUP::pickRandomTheme() const
+{
+    const QStringList &themes = AppSettings::themeNames();
+    return themes.at(QRandomGenerator::global()->bounded(static_cast<int>(themes.size())));
+}
+
+void standUP::updateSessionTheme(const QString &previousTheme)
+{
+    if (settings_.theme != AppSettings::randomThemeName())
+    {
+        sessionTheme_ = settings_.theme;
+    }
+    else if (previousTheme != AppSettings::randomThemeName())
+    {
+        // Keep the current session's theme when saving other settings,
+        // but roll a fresh one when the user switches to Random.
+        sessionTheme_ = pickRandomTheme();
+    }
 }

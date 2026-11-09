@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QMediaPlayer>
+#include <QRandomGenerator>
 #include <QUrl>
 
 #ifndef M_PI
@@ -563,11 +564,7 @@ QString canonicalBuiltInName(const QString &soundName)
 
 bool isBuiltInSoundName(const QString &soundName)
 {
-    const QString canon = canonicalBuiltInName(soundName);
-    return (canon == "High Beep" || canon == "Low Beep" || canon == "Triple Low Beep" ||
-            canon == "Frog" || canon == "Hummingbird" || canon == "Sonar Ping" ||
-            canon == "Wind Chime" || canon == "Wabble" || canon == "Fairy Walk" ||
-            canon == "Whoop Whoop" || canon == "Twinkle");
+    return AppSettings::builtInSoundNames().contains(canonicalBuiltInName(soundName));
 }
 } // namespace
 
@@ -597,6 +594,12 @@ void AudioPlayer::playAlert()
         return;
     }
 
+    if (settings_.soundType == AppSettings::randomSoundName())
+    {
+        playRandomSound();
+        return;
+    }
+
     if (settings_.soundType == "Custom Audio File")
     {
         if (!settings_.customSoundPath.isEmpty())
@@ -613,6 +616,12 @@ void AudioPlayer::playPreview(const QString &soundTypeOrPath)
 {
     if (soundTypeOrPath.isEmpty() || soundTypeOrPath.compare("Silent", Qt::CaseInsensitive) == 0)
     {
+        return;
+    }
+
+    if (soundTypeOrPath == AppSettings::randomSoundName())
+    {
+        playRandomSound();
         return;
     }
 
@@ -634,6 +643,52 @@ void AudioPlayer::playBuiltInSound(const QString &soundName)
     {
         playFile(path);
     }
+}
+
+void AudioPlayer::playRandomSound()
+{
+    const QStringList pool = randomSoundPool();
+    if (pool.isEmpty())
+    {
+        return;
+    }
+
+    QString pick;
+    if (pool.size() == 1)
+    {
+        pick = pool.first();
+    }
+    else
+    {
+        do
+        {
+            pick = pool.at(QRandomGenerator::global()->bounded(static_cast<int>(pool.size())));
+        } while (pick == lastRandomSound_);
+    }
+
+    lastRandomSound_ = pick;
+    if (pick == "Custom Audio File")
+    {
+        playFile(settings_.customSoundPath);
+    }
+    else
+    {
+        playBuiltInSound(pick);
+    }
+}
+
+QStringList AudioPlayer::randomSoundPool() const
+{
+    QStringList pool = AppSettings::builtInSoundNames();
+    if (!settings_.customSoundPath.isEmpty())
+    {
+        const QFileInfo info(settings_.customSoundPath);
+        if (info.exists() && info.isFile())
+        {
+            pool.append("Custom Audio File");
+        }
+    }
+    return pool;
 }
 
 QString AudioPlayer::ensureBuiltInSoundFile(const QString &soundName)

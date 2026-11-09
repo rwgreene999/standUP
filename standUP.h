@@ -48,6 +48,8 @@ private:
     void startTimerExecution();
     void stopTimer();
     void applyTheme(const QString &themeName = QString());
+    QString pickRandomTheme() const;
+    void updateSessionTheme(const QString &previousTheme);
 
     QStackedWidget *stackedWidget_ = nullptr;
     MainScreen *mainScreen_ = nullptr;
@@ -65,4 +67,5 @@ private:
     AudioPlayer *audioPlayer_ = nullptr;
     SystemAlert *systemAlert_ = nullptr;
     QString normalStyleSheet_;
+    QString sessionTheme_;
 };
