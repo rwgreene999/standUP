@@ -9,7 +9,8 @@ SystemAlert::SystemAlert(QWidget *targetWindow, QObject *parent)
 
 void SystemAlert::configure(const AppSettings &settings, const QString &normalStyleSheet)
 {
-    topmost_ = settings.topmost;
+    // An alert always takes over the screen by design; only the flash and
+    // theme parts of the notification are configurable.
     flashEnabled_ = settings.flashScreen;
     normalStyleSheet_ = normalStyleSheet;
 }
@@ -17,11 +18,28 @@ void SystemAlert::configure(const AppSettings &settings, const QString &normalSt
 void SystemAlert::start()
 {
     isAlerting_ = true;
-    if (topmost_)
+
+    // Always make the alert window topmost. Changing flags on a visible
+    // top-level widget hides/recreates it, so do this before showing again.
+    const Qt::WindowFlags flags = targetWindow_->windowFlags();
+    if (!(flags & Qt::WindowStaysOnTopHint))
     {
-        targetWindow_->setWindowFlags(targetWindow_->windowFlags() | Qt::WindowStaysOnTopHint);
+        targetWindow_->setWindowFlags(flags | Qt::WindowStaysOnTopHint);
+    }
+
+    // Restore from minimized and make sure it is visible after the flag change.
+    if (targetWindow_->isMinimized())
+    {
+        targetWindow_->showNormal();
+    }
+    else
+    {
         targetWindow_->show();
     }
+
+    // These are the parts that actually put it in front of the user.
+    targetWindow_->raise();
+    targetWindow_->activateWindow();
 
     if (flashEnabled_)
     {
@@ -39,11 +57,16 @@ void SystemAlert::stop()
     isAlerting_ = false;
     flashTimer_->stop();
     flashState_ = false;
-    if (topmost_ && (targetWindow_->windowFlags() & Qt::WindowStaysOnTopHint))
+
+    // Acknowledging/dismissing the alert releases the topmost state so the
+    // window can drift back into the background.
+    const Qt::WindowFlags flags = targetWindow_->windowFlags();
+    if (flags & Qt::WindowStaysOnTopHint)
     {
-        targetWindow_->setWindowFlags(targetWindow_->windowFlags() & ~Qt::WindowStaysOnTopHint);
+        targetWindow_->setWindowFlags(flags & ~Qt::WindowStaysOnTopHint);
         targetWindow_->show();
     }
+
     targetWindow_->setWindowOpacity(1.0);
     targetWindow_->setStyleSheet(normalStyleSheet_);
 }

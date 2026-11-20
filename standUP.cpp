@@ -84,6 +84,17 @@ bool standUP::eventFilter(QObject *watched, QEvent *event)
 {
     if (isAlerting_)
     {
+        // The alert steals focus, so swallow keys for the first 3 seconds to
+        // avoid typing into standUP when the user was typing in another app.
+        if ((event->type() == QEvent::KeyPress ||
+             event->type() == QEvent::KeyRelease ||
+             event->type() == QEvent::ShortcutOverride) &&
+            alertKeyIgnoreTimer_.isValid() &&
+            alertKeyIgnoreTimer_.elapsed() < 3000)
+        {
+            return true;
+        }
+
         if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TouchBegin)
         {
             auto *widget = qobject_cast<QWidget *>(watched);
@@ -220,6 +231,7 @@ void standUP::triggerAlert()
 {
     isRunning_ = false;
     isAlerting_ = true;
+    alertKeyIgnoreTimer_.start();
     mainScreen_->statusLabel()->setText("Time to stand up! (Click anywhere to dismiss)");
 
     audioPlayer_->playAlert();
@@ -237,6 +249,7 @@ void standUP::dismissAlert()
     }
 
     isAlerting_ = false;
+    alertKeyIgnoreTimer_.invalidate();
     systemAlert_->stop();
     audioPlayer_->stopPlayback();
 

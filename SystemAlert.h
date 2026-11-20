@@ -26,6 +26,5 @@ private:
     bool flashState_ = false;
     bool flashEnabled_ = false;
     bool isAlerting_ = false;
-    bool topmost_ = false;
     QString normalStyleSheet_;
 };

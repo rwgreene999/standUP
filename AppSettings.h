@@ -34,7 +34,6 @@ struct AppSettings
 
     QString soundType = "High Beep";
     QString customSoundPath;
-    bool topmost = false;
     bool flashScreen = true;
     QString theme = "Dark";
 
@@ -76,10 +75,6 @@ struct AppSettings
         {
             customSoundPath = obj["customSoundPath"].toString();
         }
-        if (obj.contains("topmost") && obj["topmost"].isBool())
-        {
-            topmost = obj["topmost"].toBool();
-        }
         if (obj.contains("flashScreen") && obj["flashScreen"].isBool())
         {
             flashScreen = obj["flashScreen"].toBool();
@@ -103,7 +98,6 @@ struct AppSettings
         QJsonObject obj;
         obj["soundType"] = soundType;
         obj["customSoundPath"] = customSoundPath;
-        obj["topmost"] = topmost;
         obj["flashScreen"] = flashScreen;
         obj["theme"] = theme;
 

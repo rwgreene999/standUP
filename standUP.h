@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDateTime>
+#include <QElapsedTimer>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
@@ -61,6 +62,7 @@ private:
     bool isRunning_ = false;
     bool isPaused_ = false;
     bool isAlerting_ = false;
+    QElapsedTimer alertKeyIgnoreTimer_;
     qint64 remainingSeconds_ = 0;
 
     AppSettings settings_;
