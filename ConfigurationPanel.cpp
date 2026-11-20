@@ -53,10 +53,8 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
 
     layout->addSpacing(10);
     layout->addWidget(new QLabel("Visual Notifications:", this));
-    chkTopmost_ = new QCheckBox("Make window topmost on alert", this);
     chkFlash_ = new QCheckBox("Flash screen/window on alert", this);
     chkFlash_->setChecked(true);
-    layout->addWidget(chkTopmost_);
     layout->addWidget(chkFlash_);
 
     layout->addSpacing(10);
@@ -90,7 +88,6 @@ AppSettings ConfigurationPanel::settings() const
     AppSettings settings;
     settings.soundType = comboSound_->currentText();
     settings.customSoundPath = txtSoundFile_->text();
-    settings.topmost = chkTopmost_->isChecked();
     settings.flashScreen = chkFlash_->isChecked();
     settings.theme = comboTheme_->currentText();
     return settings;
@@ -115,7 +112,6 @@ void ConfigurationPanel::applySettings(const AppSettings &settings)
     }
     comboSound_->setCurrentText(soundType);
     txtSoundFile_->setText(settings.customSoundPath);
-    chkTopmost_->setChecked(settings.topmost);
     chkFlash_->setChecked(settings.flashScreen);
     comboTheme_->setCurrentText(settings.theme);
     updateSoundControlsState();

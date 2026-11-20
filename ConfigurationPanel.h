@@ -29,7 +29,6 @@ private:
     QComboBox *comboSound_ = nullptr;
     QLineEdit *txtSoundFile_ = nullptr;
     QPushButton *btnBrowseSound_ = nullptr;
-    QCheckBox *chkTopmost_ = nullptr;
     QCheckBox *chkFlash_ = nullptr;
     QComboBox *comboTheme_ = nullptr;
     QPushButton *btnSave_ = nullptr;
