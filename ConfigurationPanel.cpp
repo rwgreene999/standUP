@@ -2,7 +2,9 @@
 
 #include <QCheckBox>
 #include <QComboBox>
+#include <QDir>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -126,7 +128,30 @@ void ConfigurationPanel::updateSoundControlsState()
 
 void ConfigurationPanel::browseForSound()
 {
-    const QString fileName = QFileDialog::getOpenFileName(this, "Open Audio File", "", "Audio Files (*.wav *.mp3 *.ogg *.flac);;All Files (*)");
+    // If a sound file is already configured, start the dialog in its folder
+    // when that folder still exists.
+    QString initialDir;
+    const QString currentPath = txtSoundFile_->text().trimmed();
+    if (!currentPath.isEmpty())
+    {
+        const QFileInfo currentFile(currentPath);
+        if (currentFile.isDir() && currentFile.exists())
+        {
+            initialDir = currentFile.absoluteFilePath();
+        }
+        else
+        {
+            const QString dirPath = currentFile.absolutePath();
+            if (QDir(dirPath).exists())
+            {
+                initialDir = dirPath;
+            }
+        }
+    }
+
+    const QString fileName = QFileDialog::getOpenFileName(
+        this, "Open Audio File", initialDir,
+        "Audio Files (*.wav *.mp3 *.ogg *.flac);;All Files (*)");
     if (!fileName.isEmpty())
     {
         txtSoundFile_->setText(fileName);

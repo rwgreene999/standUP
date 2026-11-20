@@ -74,13 +74,15 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: Icon "0.15.0 first use of opencode-Big Pickle in code to create icon"
 * DONE: RazzleDazzle2 "0.16.0 option of random for color or sound"
 * DONE: LayoutCleanup "0.17.0 move settings to a header gear and separate stopwatch controls"
-* WIP: alertNotificatoin "0.18.0 working on Bug: Bring to foreground done not always work"
+* DONE: alertNotificatoin "0.18.0 working on Bug: Bring to foreground done not always work"
+* DONE: MusicSelection "0.19.0 If user opens to play a music file, and there is already one on the list somewhere, then open to that folder "
+
+
 
 ## where this is going 
-* Feature: If user opens to play a music file, and there is already one on the list somewhere, then open to that folder 
-* Add notificatin optino to play music until dismissed, check inpact on beeps and things 
-* Feature: add flash color choices 
 
+* Add notification option to play music until dismissed, check inpact on beeps and things 
+* Feature: add flash color choices 
 * Feature: AlertMessage In settings, allow user options for alert 
 * Feature: RepeatAlert Add a repeat button, stop current alert and start new one 
 * 
