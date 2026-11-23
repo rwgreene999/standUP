@@ -78,6 +78,7 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: alertNotificatoin "0.18.0 working on Bug: Bring to foreground done not always work"
 * DONE: MusicSelection "0.19.0 If user opens to play a music file, and there is already one on the list somewhere, then open to that folder "
 * DONE: newColors "0.20.0 added Post Modern Tech and liquid Glass color schemes" 
+* DONE: BugBeepToMP3 "0.21.0 clicking Browse switches the notification sound from a tone to Custom Audio File so a music file can be picked" 
 
 
 
