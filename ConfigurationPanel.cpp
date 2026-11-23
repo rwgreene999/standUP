@@ -123,11 +123,22 @@ void ConfigurationPanel::updateSoundControlsState()
 {
     const bool isCustom = (comboSound_->currentText() == "Custom Audio File");
     txtSoundFile_->setEnabled(isCustom);
-    btnBrowseSound_->setEnabled(isCustom);
+    // Browse stays available so a built-in sound can be replaced by a music file.
+    btnBrowseSound_->setEnabled(true);
 }
 
 void ConfigurationPanel::browseForSound()
 {
+    // Browsing switches the notification sound to a custom file. Keep the old
+    // selection so it can be restored if the user cancels the dialog.
+    const QString previousSoundType = comboSound_->currentText();
+    if (previousSoundType != "Custom Audio File")
+    {
+        const QSignalBlocker soundBlocker(comboSound_);
+        comboSound_->setCurrentText("Custom Audio File");
+        updateSoundControlsState();
+    }
+
     // If a sound file is already configured, start the dialog in its folder
     // when that folder still exists.
     QString initialDir;
@@ -155,7 +166,12 @@ void ConfigurationPanel::browseForSound()
     if (!fileName.isEmpty())
     {
         txtSoundFile_->setText(fileName);
-        comboSound_->setCurrentText("Custom Audio File");
         emit soundPreviewRequested(fileName);
+    }
+    else if (previousSoundType != "Custom Audio File")
+    {
+        const QSignalBlocker soundBlocker(comboSound_);
+        comboSound_->setCurrentText(previousSoundType);
+        updateSoundControlsState();
     }
 }
