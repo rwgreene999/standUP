@@ -16,7 +16,8 @@ struct AppSettings
     {
         static const QStringList names = {
             "Dark", "Light", "Red", "Green", "Sunset",
-            "Sunrise", "Spring", "Ocean", "Brown", "Ice"};
+            "Sunrise", "Spring", "Ocean", "Brown", "Ice",
+            "Post Modern Tech", "liquid Glass"};
         return names;
     }
 

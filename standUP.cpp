@@ -484,6 +484,22 @@ void standUP::applyTheme(const QString &themeName)
               "QLineEdit, QComboBox { background-color: #ffffff; color: #0d233a; border: 1px solid #72aee6; padding: 4px; }"
               "QCheckBox { color: #0d233a; }";
     }
+    else if (theme == "Post Modern Tech")
+    {
+        qss = "QWidget { background-color: #151225; color: #ecf7ff; }"
+              "QPushButton { background-color: #262044; color: #ecf7ff; border: 1px solid #00e5ff; padding: 6px; border-radius: 4px; }"
+              "QPushButton:hover { background-color: #3a2f66; }"
+              "QLineEdit, QComboBox { background-color: #1c1830; color: #9df6ff; border: 1px solid #ff4fa3; padding: 4px; }"
+              "QCheckBox { color: #ecf7ff; }";
+    }
+    else if (theme == "liquid Glass")
+    {
+        qss = "QWidget { background-color: #dceaf4; color: #1d3a4a; }"
+              "QPushButton { background-color: rgba(255, 255, 255, 150); color: #123043; border: 1px solid rgba(120, 180, 210, 180); padding: 6px; border-radius: 8px; }"
+              "QPushButton:hover { background-color: rgba(255, 255, 255, 210); }"
+              "QLineEdit, QComboBox { background-color: rgba(255, 255, 255, 190); color: #123043; border: 1px solid rgba(120, 180, 210, 180); padding: 4px; }"
+              "QCheckBox { color: #1d3a4a; }";
+    }
 
     normalStyleSheet_ = qss;
     setStyleSheet(qss);
