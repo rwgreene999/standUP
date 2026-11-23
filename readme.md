@@ -33,6 +33,7 @@ rm -rf build && cmake -S . -B build && cmake --build build --parallel && ./build
 one line to build and also make deb file ...
 ```
 rm -rf build && cmake -S . -B build && cmake --build build --parallel && (cd build && cpack -G DEB) && ./build/standUP
+
 ```
 
 
@@ -76,6 +77,7 @@ Also I had to install and use pavucontrol to see what I was playing music to a d
 * DONE: LayoutCleanup "0.17.0 move settings to a header gear and separate stopwatch controls"
 * DONE: alertNotificatoin "0.18.0 working on Bug: Bring to foreground done not always work"
 * DONE: MusicSelection "0.19.0 If user opens to play a music file, and there is already one on the list somewhere, then open to that folder "
+* DONE: newColors "0.20.0 added Post Modern Tech and liquid Glass color schemes" 
 
 
 
