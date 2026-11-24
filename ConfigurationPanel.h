@@ -4,10 +4,13 @@
 
 #include "AppSettings.h"
 
-class QComboBox;
-class QLineEdit;
-class QPushButton;
 class QCheckBox;
+class QComboBox;
+class QEvent;
+class QLabel;
+class QLineEdit;
+class QObject;
+class QPushButton;
 
 class ConfigurationPanel : public QWidget
 {
@@ -17,6 +20,9 @@ public:
 
     AppSettings settings() const;
     void applySettings(const AppSettings &settings);
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 signals:
     void saveRequested();
@@ -34,6 +40,7 @@ private:
     QPushButton *btnSave_ = nullptr;
     QPushButton *btnApply_ = nullptr;
     QPushButton *btnCancel_ = nullptr;
+    QLabel *lblButtonHint_ = nullptr;
 
     void browseForSound();
     void updateSoundControlsState();

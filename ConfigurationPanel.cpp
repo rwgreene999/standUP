@@ -3,6 +3,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDir>
+#include <QEvent>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QHBoxLayout>
@@ -80,9 +81,39 @@ ConfigurationPanel::ConfigurationPanel(QWidget *parent)
     buttonLayout->addWidget(btnCancel_);
     layout->addLayout(buttonLayout);
 
+    btnSave_->setToolTip("Save: saves and applies the changes.");
+    btnApply_->setToolTip("Apply: applies the changes without saving.");
+    btnCancel_->setToolTip("Cancel: discards any changes made in this panel.");
+    btnBrowseSound_->setToolTip("Browse for a custom audio file to use as the notification sound.");
+    // btnSave_->installEventFilter(this);
+    // btnApply_->installEventFilter(this);
+    // btnCancel_->installEventFilter(this);
+    // btnBrowseSound_->installEventFilter(this);
+
     connect(btnSave_, &QPushButton::clicked, this, &ConfigurationPanel::saveRequested);
     connect(btnApply_, &QPushButton::clicked, this, &ConfigurationPanel::applyRequested);
     connect(btnCancel_, &QPushButton::clicked, this, &ConfigurationPanel::cancelRequested);
+}
+
+bool ConfigurationPanel::eventFilter(QObject *watched, QEvent *event)
+{
+    const bool hoverEnter = event->type() == QEvent::Enter || event->type() == QEvent::HoverEnter;
+    const bool hoverLeave = event->type() == QEvent::Leave || event->type() == QEvent::HoverLeave;
+    /*
+        if (hoverEnter && watched == btnSave_)
+        {
+            lblButtonHint_->setText("Save: saves and applies the changes.");
+        }
+        else if (hoverEnter && watched == btnApply_)
+        {
+            lblButtonHint_->setText("Apply: applies the changes without saving.");
+        }
+        else if (hoverLeave && (watched == btnSave_ || watched == btnApply_))
+        {
+            lblButtonHint_->setText("Hover over Save or Apply for details.");
+        }
+    */
+    return QWidget::eventFilter(watched, event);
 }
 
 AppSettings ConfigurationPanel::settings() const
