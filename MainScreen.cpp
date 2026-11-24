@@ -16,42 +16,42 @@
 
 namespace
 {
-QIcon drawnGearIcon()
-{
-    const int size = 64;
-    QPixmap pixmap(size, size);
-    pixmap.fill(Qt::transparent);
-
-    QPainter painter(&pixmap);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor(140, 140, 140));
-    painter.translate(size / 2.0, size / 2.0);
-
-    const qreal body = size * 0.30;
-    const qreal tip = size * 0.44;
-    const qreal hole = size * 0.12;
-    const qreal toothWidth = size * 0.13;
-    const int teeth = 8;
-
-    for (int i = 0; i < teeth; ++i)
+    QIcon drawnGearIcon()
     {
-        painter.save();
-        painter.rotate(360.0 * i / teeth);
-        painter.drawRoundedRect(
-            QRectF(-toothWidth / 2.0, -tip, toothWidth, tip - body + size * 0.03),
-            size * 0.02, size * 0.02);
-        painter.restore();
+        const int size = 64;
+        QPixmap pixmap(size, size);
+        pixmap.fill(Qt::transparent);
+
+        QPainter painter(&pixmap);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(QColor(140, 140, 140));
+        painter.translate(size / 2.0, size / 2.0);
+
+        const qreal body = size * 0.30;
+        const qreal tip = size * 0.44;
+        const qreal hole = size * 0.12;
+        const qreal toothWidth = size * 0.13;
+        const int teeth = 8;
+
+        for (int i = 0; i < teeth; ++i)
+        {
+            painter.save();
+            painter.rotate(360.0 * i / teeth);
+            painter.drawRoundedRect(
+                QRectF(-toothWidth / 2.0, -tip, toothWidth, tip - body + size * 0.03),
+                size * 0.02, size * 0.02);
+            painter.restore();
+        }
+
+        QPainterPath path;
+        path.setFillRule(Qt::OddEvenFill);
+        path.addEllipse(QPointF(0.0, 0.0), body, body);
+        path.addEllipse(QPointF(0.0, 0.0), hole, hole);
+        painter.drawPath(path);
+
+        return QIcon(pixmap);
     }
-
-    QPainterPath path;
-    path.setFillRule(Qt::OddEvenFill);
-    path.addEllipse(QPointF(0.0, 0.0), body, body);
-    path.addEllipse(QPointF(0.0, 0.0), hole, hole);
-    painter.drawPath(path);
-
-    return QIcon(pixmap);
-}
 } // namespace
 
 MainScreen::MainScreen(QWidget *parent)
@@ -177,7 +177,9 @@ MainScreen::MainScreen(QWidget *parent)
 
     auto *stopwatchLayout = new QHBoxLayout();
     btnStopwatch_ = new QPushButton("Stopwatch", this);
+    btnStopwatch_->setToolTip("Open the stopwatch subapp.");
     btnBeginStopwatch_ = new QPushButton("Begin Stopwatch", this);
+    btnBeginStopwatch_->setToolTip("Open and start stopwatch.");
 
     stopwatchLayout->addWidget(btnStopwatch_);
     stopwatchLayout->addWidget(btnBeginStopwatch_);
